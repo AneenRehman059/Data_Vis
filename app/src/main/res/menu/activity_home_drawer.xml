@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+
+
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/ic_homep"
+            android:title="Home" />
+        <item
+            android:id="@+id/sync_down"
+            android:icon="@drawable/down"
+            android:title="Sync Down" />
+
+        <item
+            android:id="@+id/sync_up"
+            android:icon="@drawable/up"
+            android:title="Sync Up" />
+        <item
+            android:id="@+id/privacy_policy"
+            android:icon="@drawable/ic_lock"
+            android:title="Privacy Policy" />
+
+        <item
+            android:id="@+id/setting"
+            android:icon="@drawable/setting"
+            android:title="Setting" />
+
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/ic_logout_button"
+            android:title="Logout" />
+
+    </group>
+
+</menu>
+
