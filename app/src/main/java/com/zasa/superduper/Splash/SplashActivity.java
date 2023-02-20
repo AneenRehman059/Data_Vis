@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,12 +28,19 @@ public class SplashActivity extends AppCompatActivity {
     private static final String KEY_DATE = "date";
     private static final String PREF_DATE = "prf_date";
 
+    TextView tv_splash;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); //off dark mode
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        tv_splash = findViewById(R.id.splash_Logo);
+
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.fly_in_from_left);
+        tv_splash.startAnimation(animation);
 
         sharedPrefManager = new SharedPrefManager(this);
         sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);

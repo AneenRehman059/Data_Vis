@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -56,7 +57,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         headerUsername = header.findViewById(R.id.tv_haader_name);
 
         abUserName = findViewById(R.id.ab_username);
-
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(HomeActivity.this, "Under development", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         bottomNavigationView.getMenu().getItem(2).setEnabled(false);
         fragments.add(new HomeFragment());

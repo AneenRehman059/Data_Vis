@@ -45,8 +45,7 @@ public class TrackOperationPlaceActivity extends AppCompatActivity {
         btn_operation_on.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog();
-                bottomSheetDialog.show(getSupportFragmentManager(), bottomSheetDialog.getTag());
+             openBottomDrawer();
             }
         });
 
@@ -73,6 +72,7 @@ public class TrackOperationPlaceActivity extends AppCompatActivity {
                         permissionToken.continuePermissionRequest();
                     }
                 }).check();
+        openBottomDrawer();
     }
 
     public void getmylocation() {
@@ -107,12 +107,15 @@ public class TrackOperationPlaceActivity extends AppCompatActivity {
         });
     }
 
+    public void openBottomDrawer(){
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog();
+        bottomSheetDialog.show(getSupportFragmentManager(), bottomSheetDialog.getTag());
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
 
-        startActivity(new Intent(TrackOperationPlaceActivity.this, HomeActivity.class));
-        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         finish();
     }
 

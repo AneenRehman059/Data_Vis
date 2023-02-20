@@ -10,7 +10,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btn_operationOn"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
         android:text="Operation On"
+        android:background="@drawable/btn_start_day_bg"
         android:textAllCaps="false"/>
 
     <fragment

@@ -35,7 +35,7 @@
                 android:fontFamily="@font/lato_bold"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="Operations"
+                android:text="Routes"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/white"
                 android:textStyle="bold">

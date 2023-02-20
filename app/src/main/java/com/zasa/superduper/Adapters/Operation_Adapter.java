@@ -38,6 +38,7 @@ public class Operation_Adapter extends RecyclerView.Adapter<Operation_Adapter.vi
         holder.areaName.setText(model.getAssign_area());
         holder.shopName.setText(model.getAssign_shop());
         holder.lineAddresss.setText(model.getAssign_line());
+        holder.lastPurchase.setText(model.getLast_purchase());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,12 +55,13 @@ public class Operation_Adapter extends RecyclerView.Adapter<Operation_Adapter.vi
     }
 
     public class viewHolder extends RecyclerView.ViewHolder {
-        TextView areaName,shopName,lineAddresss;
+        TextView areaName,shopName,lineAddresss,lastPurchase;
         public viewHolder(@NonNull View itemView) {
             super(itemView);
             areaName  = itemView.findViewById(R.id.area_name);
             shopName  = itemView.findViewById(R.id.area_shop);
             lineAddresss  = itemView.findViewById(R.id.line_address);
+            lastPurchase = itemView.findViewById(R.id.last_purchase);
         }
     }
 }

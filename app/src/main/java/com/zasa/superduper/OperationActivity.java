@@ -62,14 +62,14 @@ public class OperationActivity extends AppCompatActivity {
     }
 
     private void getOperationList() {
-        operationList.add(new Opeartion_Model("Gulberg","59 A Rafaeam Society Malir Halt","Line 2 address"));
-        operationList.add(new Opeartion_Model("Johar Town ","59 A Rafaeam Society Malir Halt","Line 2 address"));
-        operationList.add(new Opeartion_Model("Defense Phase I","59 A Rafaeam Society Malir Halt","Line 2 address"));
-        operationList.add(new Opeartion_Model("Mughal Pura","59 A Rafaeam Society Malir Halt","Line 2 address"));
-        operationList.add(new Opeartion_Model("BaghbanPura","59 A Rafaeam Society Malir Halt","Line 2 address"));
-        operationList.add(new Opeartion_Model("Paragon City","59 A Rafaeam Society Malir Halt","Line 2 address"));
-        operationList.add(new Opeartion_Model("Lahore Cant","59 A Rafaeam Society Malir Halt","Line 2 address"));
-        operationList.add(new Opeartion_Model("Model Town","59 A Rafaeam Society Malir Halt","Line 2 address"));
+        operationList.add(new Opeartion_Model("Gulberg","59 A Rafaeam Society Malir Halt","Line 2 address","Last Purchase: 2 week ago"));
+        operationList.add(new Opeartion_Model("Johar Town ","59 A Rafaeam Society Malir Halt","Line 2 address","Last Purchase: 2 week ago"));
+        operationList.add(new Opeartion_Model("Defense Phase I","59 A Rafaeam Society Malir Halt","Line 2 address","Last Purchase: 2 week ago"));
+        operationList.add(new Opeartion_Model("Mughal Pura","59 A Rafaeam Society Malir Halt","Line 2 address","Last Purchase: 2 week ago"));
+        operationList.add(new Opeartion_Model("BaghbanPura","59 A Rafaeam Society Malir Halt","Line 2 address","Last Purchase: 2 week ago"));
+        operationList.add(new Opeartion_Model("Paragon City","59 A Rafaeam Society Malir Halt","Line 2 address","Last Purchase: 2 week ago"));
+        operationList.add(new Opeartion_Model("Lahore Cant","59 A Rafaeam Society Malir Halt","Line 2 address","Last Purchase: 2 week ago"));
+        operationList.add(new Opeartion_Model("Model Town","59 A Rafaeam Society Malir Halt","Line 2 address","Last Purchase: 2 week ago"));
 
         Operation_Adapter operation_adapter = new Operation_Adapter(operationList,this);
         operation_rv.setAdapter(operation_adapter);
@@ -84,9 +84,9 @@ public class OperationActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (layout == 1){
-            super.onBackPressed();
-        }
-
+        super.onBackPressed();
+        startActivity(new Intent(OperationActivity.this, HomeActivity.class));
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        finish();
     }
 }

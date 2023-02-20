@@ -32,6 +32,12 @@
         android:theme="@style/Theme.LoyaltyBunch"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".After_Checkout"
+            android:exported="false" />
+        <activity
+            android:name=".CheckOut_Activity"
+            android:exported="false" />
+        <activity
             android:name=".TrackOperationPlaceActivity"
             android:exported="false" />
         <!--
@@ -52,7 +58,7 @@
         <activity
             android:name=".StartDay_Activity"
             android:exported="false"
-            android:label="@string/title_activity_start_day"></activity>
+            android:label="@string/title_activity_start_day" />
         <activity
             android:name=".SettingActivity"
             android:exported="false"
