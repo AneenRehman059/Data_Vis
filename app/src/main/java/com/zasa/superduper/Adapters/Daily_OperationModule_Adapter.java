@@ -11,9 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.zasa.superduper.After_Checkout;
+import com.zasa.superduper.activities.After_Checkout;
 import com.zasa.superduper.Models.Daily_OperationModule_Model;
-import com.zasa.superduper.Models.Scoring_Adapter;
 import com.zasa.superduper.R;
 
 import java.util.ArrayList;

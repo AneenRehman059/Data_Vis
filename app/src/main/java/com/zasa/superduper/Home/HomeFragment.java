@@ -36,6 +36,8 @@ import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
 import com.zasa.superduper.Fragment.ChartFragment;
+import com.zasa.superduper.Fragment.MenuFragment;
+import com.zasa.superduper.Fragment.TrophyFragment;
 import com.zasa.superduper.Models.Scoring_Adapter;
 import com.zasa.superduper.R;
 import com.zasa.superduper.Scoring_Criteria_Model;
@@ -88,20 +90,51 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         binding.mainRecyclerview.setLayoutManager(layoutManager);
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                startProgress();
-            }
-        });
-        thread.start();
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                startProgress();
+//            }
+//        });
+//        thread.start();
 
         binding.ivChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ChartFragment chartFragment = new ChartFragment();
+//                ChartFragment chartFragment = new ChartFragment();
+//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                transaction.replace(R.id.frame_layout, chartFragment);
+//                transaction.addToBackStack(null);
+//                transaction.commit();
+
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_layout, new ChartFragment())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        binding.ivTrophy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                TrophyFragment trophyFragment = new TrophyFragment();
+//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                transaction.replace(R.id.frame_layout, trophyFragment);
+//                transaction.commit();
+
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_layout, new TrophyFragment())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        binding.ivMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MenuFragment menuFragment = new MenuFragment();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.frame_layout,chartFragment);
+                transaction.replace(R.id.frame_layout, menuFragment);
                 transaction.commit();
             }
         });
@@ -111,22 +144,22 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public void startProgress() {
-        for (value = 0; value < 100; value = value + 1) {
-            try {
-                Thread.sleep(50);
-                binding.progressbarId.setProgress(value);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    binding.textid.setText(String.valueOf(value));
-                }
-            }, 5000);
-        }
-    }
+//    public void startProgress() {
+//        for (value = 0; value < 100; value = value + 1) {
+//            try {
+//                Thread.sleep(50);
+//                binding.progressbarId.setProgress(value);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    binding.textid.setText(String.valueOf(value));
+//                }
+//            }, 5000);
+//        }
+//    }
 
 
 }

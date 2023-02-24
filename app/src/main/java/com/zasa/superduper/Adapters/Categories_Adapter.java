@@ -1,6 +1,7 @@
 package com.zasa.superduper.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.zasa.superduper.Models.Category_Model;
 import com.zasa.superduper.R;
+import com.zasa.superduper.activities.QuestionActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,26 +44,11 @@ public class Categories_Adapter extends RecyclerView.Adapter<Categories_Adapter.
 
         holder.category_name.setText(model.getCategory_name());
 
-        boolean isExpandable = model.isExpandable();
-        holder.expandableLayot.setVisibility(isExpandable ? View.VISIBLE : View.GONE);
-
-        if (isExpandable){
-            holder.mArrowImage.setImageResource(R.drawable.arrow_up_24);
-        }else{
-            holder.mArrowImage.setImageResource(R.drawable.arrow_down_24);
-        }
-
-        Nested_Cat_Adapter adapter =new Nested_Cat_Adapter(list);
-        holder.nestedRecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
-        holder.nestedRecyclerView.setHasFixedSize(true);
-        holder.nestedRecyclerView.setAdapter(adapter);
-
-        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                model.setExpandable(!model.isExpandable());
-                list = model.getNestedList();
-                notifyItemChanged(holder.getAdapterPosition());
+                Intent intent = new Intent(context, QuestionActivity.class);
+                context.startActivity(intent);
             }
         });
     }
@@ -81,10 +68,8 @@ public class Categories_Adapter extends RecyclerView.Adapter<Categories_Adapter.
             super(itemView);
 
             category_name = itemView.findViewById(R.id.txt_categories);
-            nestedRecyclerView = itemView.findViewById(R.id.child_rv);
-            expandableLayot = itemView.findViewById(R.id.expandable_layout);
             linearLayout = itemView.findViewById(R.id.linear_layout);
-            mArrowImage = itemView.findViewById(R.id.iv_arrow_down);
+
         }
     }
 }

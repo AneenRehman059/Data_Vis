@@ -32,13 +32,25 @@
         android:theme="@style/Theme.LoyaltyBunch"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".After_Checkout"
+            android:name=".activities.NumericActivity"
             android:exported="false" />
         <activity
-            android:name=".CheckOut_Activity"
+            android:name=".activities.CaptureImageActivity"
             android:exported="false" />
         <activity
-            android:name=".TrackOperationPlaceActivity"
+            android:name=".activities.ScannerViewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.QuestionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.After_Checkout"
+            android:exported="false" />
+        <activity
+            android:name=".activities.CheckOut_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.TrackOperationPlaceActivity"
             android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
@@ -56,11 +68,11 @@
             android:value=" AIzaSyB8Zp_xB5VjC-sgVqsPeLxOyxRnfvqCasE" />
 
         <activity
-            android:name=".StartDay_Activity"
+            android:name=".activities.StartDay_Activity"
             android:exported="false"
             android:label="@string/title_activity_start_day" />
         <activity
-            android:name=".SettingActivity"
+            android:name=".activities.SettingActivity"
             android:exported="false"
             android:theme="@style/NoActionBar">
             <meta-data
@@ -68,7 +80,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".MoreActivity"
+            android:name=".activities.MoreActivity"
             android:exported="false"
             android:theme="@style/NoActionBar">
             <meta-data
@@ -76,7 +88,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".OperationActivity"
+            android:name=".activities.OperationActivity"
             android:exported="false"
             android:theme="@style/NoActionBar">
             <meta-data
@@ -101,7 +113,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomeActivity"
+            android:name=".activities.HomeActivity"
             android:theme="@style/NoActionBar" /> <!-- <meta-data -->
         <!-- android:name="com.google.android.gms.ads.APPLICATION_ID" -->
         <!-- android:value="@string/AdMod_app_id" /> -->
@@ -111,6 +123,16 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/AddMob_app_id" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths_app" />
+        </provider>
     </application>
 
 </manifest>

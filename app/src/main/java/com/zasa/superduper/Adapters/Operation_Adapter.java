@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.zasa.superduper.Models.Opeartion_Model;
 import com.zasa.superduper.R;
-import com.zasa.superduper.TrackOperationPlaceActivity;
+import com.zasa.superduper.activities.TrackOperationPlaceActivity;
 
 import java.util.ArrayList;
 

@@ -7,19 +7,14 @@ import android.os.Handler;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
-import com.zasa.superduper.HomeActivity;
+import com.zasa.superduper.activities.HomeActivity;
 import com.zasa.superduper.Login.LoginActivity;
 import com.zasa.superduper.R;
 import com.zasa.superduper.SharedPrefManager;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 public class SplashActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
@@ -53,18 +48,14 @@ public class SplashActivity extends AppCompatActivity {
         editor.putString(PREF_DATE, sharedpref_date);
         editor.apply();
 
-//        if (date != null) {
-//            Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
-//            startActivity(intent);
-//        }
-
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
 
+                SharedPreferences sharedPreferences = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
+                boolean hasLoggedIn = sharedPreferences.getBoolean("hasLoggedIn", false);
 
-                if (sharedPrefManager.isLoggedIn()){
+                if (hasLoggedIn){
                     Intent intent = new Intent(SplashActivity.this,HomeActivity.class);
                     startActivity(intent);
                     finish();
@@ -73,6 +64,7 @@ public class SplashActivity extends AppCompatActivity {
                     Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
+
                 }
 
             }

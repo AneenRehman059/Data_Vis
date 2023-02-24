@@ -7,21 +7,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.zasa.superduper.HomeActivity;
+import com.zasa.superduper.activities.HomeActivity;
 import com.zasa.superduper.R;
 
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 public class LoginActivity extends AppCompatActivity {
+    public static String PREFS_NAME = "MyPrefsFile";
     TextInputEditText et_Phone, et_pass;
     CheckBox cb_RememberPass;
 
@@ -59,6 +53,16 @@ public class LoginActivity extends AppCompatActivity {
             et_Phone.setText(phone);
             et_pass.setText(pass);
         }
+
+        loginPrefrence();
+    }
+
+    private void loginPrefrence() {
+        SharedPreferences sharedPreferenc = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
+        SharedPreferences.Editor editor = sharedPreferenc.edit();
+
+        editor.putBoolean("hasLoggedIn", true);
+        editor.commit();
     }
 
     public void Login(View view) {
@@ -80,19 +84,15 @@ public class LoginActivity extends AppCompatActivity {
 
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         startActivity(intent);
-        progressDialog.show();
+//        progressDialog.show();
 
         finish();
 
     }
 
-
-
-
     public void forgetPassword(View view) {
 //        startActivity(new Intent(context, ForgetPassActivity.class));
     }
-
 
 //    @Override
 //    protected void onStart() {

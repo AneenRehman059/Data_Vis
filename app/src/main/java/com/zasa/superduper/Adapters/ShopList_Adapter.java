@@ -10,8 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.zasa.superduper.CheckOut_Activity;
-import com.zasa.superduper.Models.Scoring_Adapter;
+import com.zasa.superduper.activities.CheckOut_Activity;
 import com.zasa.superduper.Models.ShopList_Model;
 import com.zasa.superduper.R;
 

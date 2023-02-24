@@ -1,4 +1,4 @@
-package com.zasa.superduper;
+package com.zasa.superduper.activities;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,8 +12,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +25,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import com.zasa.superduper.Home.HomeFragment;
 import com.zasa.superduper.Profile.ProfileActivity;
+import com.zasa.superduper.R;
 
 
 import java.util.ArrayList;
@@ -40,6 +43,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     View header;
     Context context;
     CircleImageView userHeaderImage;
+    int value;
+    Handler handler = new Handler();
+    ProgressBar progressBar;
+    TextView text_id;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -55,8 +62,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         header = navigationView.getHeaderView(0);
         bottomNavigationView.setBackground(null);
         headerUsername = header.findViewById(R.id.tv_haader_name);
-
+        progressBar = findViewById(R.id.progressbarId);
+        text_id = findViewById(R.id.textid);
         abUserName = findViewById(R.id.ab_username);
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                startProgress();
+            }
+        });
+        thread.start();
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -161,8 +177,34 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        finish();
-        super.onBackPressed();
+
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+
+        if (count ==0){
+            finish();
+            super.onBackPressed();
+        }
+        else
+        {
+            getSupportFragmentManager().popBackStack();
+        }
+    }
+
+    public void startProgress() {
+        for (value = 0; value < 100; value = value + 1) {
+            try {
+                Thread.sleep(50);
+                progressBar.setProgress(value);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    text_id.setText(String.valueOf(value));
+                }
+            }, 5000);
+        }
     }
 
 }

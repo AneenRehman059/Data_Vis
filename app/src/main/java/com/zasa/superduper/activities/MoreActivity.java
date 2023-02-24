@@ -1,14 +1,13 @@
-package com.zasa.superduper;
+package com.zasa.superduper.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import com.zasa.superduper.R;
 
 
 public class MoreActivity extends AppCompatActivity  {

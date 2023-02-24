@@ -1,4 +1,4 @@
-package com.zasa.superduper;
+package com.zasa.superduper.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.zasa.superduper.Adapters.Operation_Adapter;
 import com.zasa.superduper.Models.Opeartion_Model;
+import com.zasa.superduper.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

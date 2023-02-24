@@ -1,9 +1,7 @@
-package com.zasa.superduper;
+package com.zasa.superduper.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.Intent;
@@ -31,33 +29,31 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.zasa.superduper.Fragment.BottomSheetDialog;
+import com.zasa.superduper.R;
 
-
-public class StartDay_Activity extends AppCompatActivity {
+public class TrackOperationPlaceActivity extends AppCompatActivity {
     SupportMapFragment smf;
     FusedLocationProviderClient client;
-    Button btn_StartDay;
-
+    Button btn_operation_on;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_day);
+        setContentView(R.layout.activity_track_operation_place);
 
-        btn_StartDay = findViewById(R.id.btn_start_day);
-        btn_StartDay.setOnClickListener(new View.OnClickListener() {
+        btn_operation_on =(Button) findViewById(R.id.btn_operationOn);
+
+        btn_operation_on.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(StartDay_Activity.this, HomeActivity.class);
-                startActivity(intent);
+             openBottomDrawer();
             }
         });
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        smf = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
+        smf = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         client = LocationServices.getFusedLocationProviderClient(this);
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
         Dexter.withContext(getApplicationContext())
                 .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -77,6 +73,7 @@ public class StartDay_Activity extends AppCompatActivity {
                         permissionToken.continuePermissionRequest();
                     }
                 }).check();
+        openBottomDrawer();
     }
 
     public void getmylocation() {
@@ -101,7 +98,7 @@ public class StartDay_Activity extends AppCompatActivity {
                         LatLng latLng=new LatLng(location.getLatitude(),location.getLongitude());
                         MarkerOptions markerOptions=new MarkerOptions().position(latLng).title("You are here...!!");
 
-                        Toast.makeText(StartDay_Activity.this, (int) location.getLatitude()+"\n"+location.getLongitude(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(TrackOperationPlaceActivity.this, (int) location.getLatitude()+"\n"+location.getLongitude(), Toast.LENGTH_SHORT).show();
 
                         googleMap.addMarker(markerOptions);
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,17));
@@ -111,12 +108,16 @@ public class StartDay_Activity extends AppCompatActivity {
         });
     }
 
+    public void openBottomDrawer(){
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog();
+        bottomSheetDialog.show(getSupportFragmentManager(), bottomSheetDialog.getTag());
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
 
-        startActivity(new Intent(StartDay_Activity.this, HomeActivity.class));
-        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         finish();
     }
+
 }

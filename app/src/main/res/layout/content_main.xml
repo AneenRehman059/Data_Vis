@@ -5,13 +5,78 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".HomeActivity">
+    tools:context=".activities.HomeActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#00000000"
         android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/userImage"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:src="@drawable/person" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_haader_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hameed Shah"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="D00010B1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ProgressBar
+                        android:id="@+id/progressbarId"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_width="@dimen/_150sdp"
+                        android:layout_height="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:progressBackgroundTint="#C0B8B8"
+                        android:progressTint="#E91E63" />
+
+                    <TextView
+                        android:id="@+id/textid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_15sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:text=""
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@color/lightGray"/>
         <FrameLayout
             android:id="@+id/frame_layout"
             android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.zasa.superduper;
+package com.zasa.superduper.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.zasa.superduper.Adapters.Daily_OperationModule_Adapter;
 import com.zasa.superduper.Models.Daily_OperationModule_Model;
+import com.zasa.superduper.R;
 
 import java.util.ArrayList;
 
