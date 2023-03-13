@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.OperationActivity">
+    tools:context=".activities.RoutesActivity">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
             android:id="@+id/lay1"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/secondary">
+            android:background="@color/secondary1">
 
             <ImageView
                 android:id="@+id/btn_back"

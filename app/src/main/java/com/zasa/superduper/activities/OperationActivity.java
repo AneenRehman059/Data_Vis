@@ -85,8 +85,7 @@ public class OperationActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(OperationActivity.this, HomeActivity.class));
-        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
         finish();
     }
 }

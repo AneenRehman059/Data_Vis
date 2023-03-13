@@ -114,8 +114,6 @@ public class StartDay_Activity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        startActivity(new Intent(StartDay_Activity.this, HomeActivity.class));
-        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         finish();
     }
 }

@@ -6,60 +6,79 @@
     android:layout_height="match_parent"
     tools:context=".activities.TrackOperationPlaceActivity">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <RelativeLayout
-            android:id="@+id/lay1"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/secondary">
+        android:layout_height="@dimen/_40sdp"
+        app:cardElevation="@dimen/_3sdp"
+        android:background="@color/secondary1"
+        app:cardBackgroundColor="@color/secondary1"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_routes"
+            android:text="Route Name"
+            android:textColor="@color/white"
+            android:fontFamily="@font/gilory_semibold"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+    </androidx.cardview.widget.CardView>
 
-            <ImageView
-                android:id="@+id/btn_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:padding="@dimen/_8sdp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_btn_back" />
-
-            <TextView
-                android:id="@+id/house_header_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:fontFamily="@font/lato_bold"
-                android:gravity="center"
-                android:maxLines="1"
-                android:text="Location"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/white"
-                android:textStyle="bold">
-
-            </TextView>
-
-        </RelativeLayout>
-    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btn_operationOn"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
         android:layout_marginRight="@dimen/_5sdp"
         android:layout_marginBottom="@dimen/_5sdp"
-        android:text="Operation On"
+        android:text="Store List"
         android:background="@drawable/btn_start_day_bg"
         android:textAllCaps="false"/>
 
-    <fragment
+
+    <RelativeLayout
+        android:id="@+id/lay1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="@dimen/_50sdp"
+        android:layout_marginStart="@dimen/_5sdp"
+
+        android:background="@color/secondary">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/_8sdp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/app_icon" />
+
+        <TextView
+            android:id="@+id/house_header_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/lato_bold"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="Locationasdas"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/black"
+            android:textStyle="bold">
+
+        </TextView>
+
+    </RelativeLayout>
+
+    <fragment
         android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

@@ -1,7 +1,8 @@
 <resources>
-    <string name="app_name">Tracking</string>
+    <string name="app_name">DataVis</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="error_msg">Please set auto time in datetime setting</string>
     <string-array name="items">
         <item>-Select a Question-</item>
         <item>Your nick name</item>
@@ -27,6 +28,8 @@
     <string name="Interstitial_add_unit_id">ca-app-pub-3940256099942544/1033173712</string>
     <string name="banner_ad_id"></string>
     <string name="title_activity_start_day">StartDay_Activity</string>
+    <string name="scan_freezer_qr">Scan Freezer QR</string>
+    <string name="rose_petal">Rose Petal</string>
 
 </resources>
 

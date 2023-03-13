@@ -11,8 +11,10 @@ import androidx.fragment.app.FragmentTransaction;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -23,10 +25,16 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
+import com.zasa.superduper.CustomToastError;
 import com.zasa.superduper.Home.HomeFragment;
+import com.zasa.superduper.Models.LoginModel;
 import com.zasa.superduper.Profile.ProfileActivity;
 import com.zasa.superduper.R;
+import com.zasa.superduper.helpers.PreferencesData;
 
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -38,15 +46,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     FloatingActionButton floatingActionButton;
     ArrayList<Fragment> fragments = new ArrayList<>();
     NavigationView navigationView;
-    TextView headerUsername, abUserName;
+    TextView headerUsername, abUserName, tv_headerName,tv_headerEmail;
     DrawerLayout drawer;
     View header;
+    View view;
     Context context;
     CircleImageView userHeaderImage;
     int value;
     Handler handler = new Handler();
     ProgressBar progressBar;
     TextView text_id;
+    TextView hdrTvEmail;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -58,13 +68,26 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         bottomNavigationView = findViewById(R.id.bottom_nav);
-        floatingActionButton = findViewById(R.id.fab_qr);
         header = navigationView.getHeaderView(0);
         bottomNavigationView.setBackground(null);
         headerUsername = header.findViewById(R.id.tv_haader_name);
+        tv_headerName = findViewById(R.id.tv_haaderNname);
+        hdrTvEmail = header.findViewById(R.id.tvHdrEmail);
+        tv_headerEmail = findViewById(R.id.tv_HdrEmail);
+
         progressBar = findViewById(R.id.progressbarId);
         text_id = findViewById(R.id.textid);
+        view = findViewById(android.R.id.content);
         abUserName = findViewById(R.id.ab_username);
+
+        // app main jahan bhy login response say koe value cheheyay to ya 2 line likhr kr get krain gay //
+        LoginModel user = new LoginModel("", "");
+        user.getLoggedUserFromPreference();
+
+        tv_headerEmail.setText(user.getEmail());
+        tv_headerName.setText(user.getName());
+        headerUsername.setText(user.getName());
+        hdrTvEmail.setText(user.getEmail());
 
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -73,12 +96,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         });
         thread.start();
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(HomeActivity.this, "Under development", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         bottomNavigationView.getMenu().getItem(2).setEnabled(false);
         fragments.add(new HomeFragment());
@@ -89,17 +106,23 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             if (item.getItemId() == R.id.home) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, fragments.get(0)).commit();
             } else if (item.getItemId() == R.id.operation) {
-                startActivity(new Intent(HomeActivity.this, OperationActivity.class));
-                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                finish();
+
+                if (isTimeAutomatic(HomeActivity.this)) {
+                    startActivity(new Intent(HomeActivity.this, RoutesActivity.class));
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+//                    finish();
+                } else {
+                    new CustomToastError().Show_Toast(HomeActivity.this, view, getString(R.string.error_msg));
+//                    Toast.makeText(HomeActivity.this, "Please set auto time in datetime setting", Toast.LENGTH_SHORT).show();
+                }
             } else if (item.getItemId() == R.id.setting) {
                 startActivity(new Intent(HomeActivity.this, SettingActivity.class));
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                finish();
+//                finish();
             } else if (item.getItemId() == R.id.more) {
                 startActivity(new Intent(HomeActivity.this, MoreActivity.class));
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                finish();
+//                finish();
 //                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragments.get(1)).commit();
             }
             return true;
@@ -109,8 +132,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         transaction.replace(R.id.frame_layout, new HomeFragment());
         transaction.commit();
 
-        context = HomeActivity.this;
+//        context = HomeActivity.this;
 
+    }
+
+    public static boolean isTimeAutomatic(Context c) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            return Settings.Global.getInt(c.getContentResolver(), Settings.Global.AUTO_TIME, 0) == 1;
+        } else {
+            return android.provider.Settings.System.getInt(c.getContentResolver(), android.provider.Settings.System.AUTO_TIME, 0) == 1;
+        }
     }
 
     public void setupDrawer() {
@@ -180,12 +211,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
-        if (count ==0){
+        if (count == 0) {
             finish();
             super.onBackPressed();
-        }
-        else
-        {
+        } else {
             getSupportFragmentManager().popBackStack();
         }
     }

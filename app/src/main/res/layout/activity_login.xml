@@ -31,10 +31,10 @@
         <ImageView
             android:id="@+id/splashLogo"
             android:layout_width="@dimen/_120sdp"
-            android:layout_height="@dimen/_60sdp"
+            android:layout_height="@dimen/_80sdp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="@dimen/_15sdp"
-            android:background="@drawable/superduperlogo" />
+            android:background="@drawable/app_icon" />
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -42,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="Mobile"
+            android:hint="Email"
             app:boxBackgroundColor="#EDF2FD"
             app:boxCornerRadiusBottomEnd="6dp"
             app:boxCornerRadiusBottomStart="6dp"
@@ -54,16 +54,16 @@
             app:endIconMode="clear_text"
             app:endIconTint="@color/black"
             app:hintTextColor="@color/black"
-            app:startIconDrawable="@drawable/ic_telephone"
+            app:startIconDrawable="@drawable/ic_email"
             app:startIconTint="@color/secondary">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/loginPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="phone"
-                android:maxLength="11"
+                android:inputType="textEmailAddress"
                 android:textColor="@color/black"
+
                 android:textColorHint="#72000000" />
 
         </com.google.android.material.textfield.TextInputLayout>

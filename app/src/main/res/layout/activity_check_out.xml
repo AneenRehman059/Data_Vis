@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.CheckOut_Activity">
+    tools:context=".activities.Compaign_Activity">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
             android:id="@+id/lay1"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/secondary">
+            android:background="@color/secondary1">
 
             <ImageView
                 android:id="@+id/btn_back"
@@ -36,7 +36,7 @@
                 android:fontFamily="@font/lato_bold"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="Time Spent"
+                android:text="Tasks To Do"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/white"
                 android:textStyle="bold">
@@ -53,7 +53,50 @@
         android:layout_marginTop="@dimen/_20sdp"
         android:text="Bismillah General Store"
         android:textStyle="bold"
+        android:id="@+id/tvStoreName"
         android:textSize="@dimen/_16sdp" />
+
+<!--    <Button-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="RESET"-->
+<!--        android:background="@null"-->
+<!--        android:textColor="@color/red"-->
+<!--        android:textSize="16sp"-->
+<!--        android:onClick="resetTapped"/>-->
+
+
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="TIMER"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:textSize="16sp"/>-->
+
+
+<!--    <Button-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="START"-->
+<!--        android:id="@+id/startStopButton"-->
+<!--        android:background="@null"-->
+<!--        android:textColor="@color/green"-->
+<!--        android:textSize="16sp"-->
+<!--        android:layout_gravity="end"-->
+<!--        android:onClick="startStopTapped"/>-->
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:textSize="20sp"
+        android:text="00 : 00 : 00"
+        android:textStyle="bold"
+        android:id="@+id/tvTimer" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -103,15 +146,42 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_20sdp"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal">
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/startStopButton"
+        android:layout_marginRight="@dimen/_5sdp"
         android:layout_gravity="center"
         android:textColor="@color/white"
         android:background="@drawable/check_out_btn_bg"
-        android:paddingLeft="@dimen/_90sdp"
-        android:paddingRight="@dimen/_90sdp"
-        android:text="Checkout"
-        android:textAllCaps="false" />
+        android:paddingLeft="@dimen/_20sdp"
+        android:paddingRight="@dimen/_20sdp"
+        android:text="CheckIn"
+        android:textAllCaps="false"
+        android:onClick="startStopTapped"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:id="@+id/checkOutButton"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:background="@drawable/check_out_btn_bg"
+            android:paddingLeft="@dimen/_10sdp"
+            android:paddingRight="@dimen/_10sdp"
+            android:text="CheckOut"
+            android:textAllCaps="false"
+            android:visibility="gone"
+            />
+
+    </LinearLayout>
 
 </LinearLayout>

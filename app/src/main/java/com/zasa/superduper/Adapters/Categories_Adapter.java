@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.zasa.superduper.Models.Category_Model;
+import com.zasa.superduper.MyCallBack;
 import com.zasa.superduper.R;
 import com.zasa.superduper.activities.QuestionActivity;
 
@@ -24,11 +25,13 @@ import java.util.List;
 public class Categories_Adapter extends RecyclerView.Adapter<Categories_Adapter.viewHolder> {
     ArrayList<Category_Model> catList;
     private List<String> list = new ArrayList<>();
+    private MyCallBack myCallBack;
     Context context;
 
-    public Categories_Adapter(ArrayList<Category_Model> catList, Context context) {
+    public Categories_Adapter(ArrayList<Category_Model> catList, Context context, MyCallBack myCallBack) {
         this.catList = catList;
         this.context = context;
+        this.myCallBack = myCallBack;
     }
 
     @NonNull
@@ -48,6 +51,8 @@ public class Categories_Adapter extends RecyclerView.Adapter<Categories_Adapter.
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, QuestionActivity.class);
+                intent.putExtra("category_id",model.getCategory_id());
+                intent.putExtra("category_name",model.getCategory_name());
                 context.startActivity(intent);
             }
         });

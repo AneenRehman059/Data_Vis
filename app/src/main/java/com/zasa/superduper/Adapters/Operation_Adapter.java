@@ -61,7 +61,7 @@ public class Operation_Adapter extends RecyclerView.Adapter<Operation_Adapter.vi
             areaName  = itemView.findViewById(R.id.area_name);
             shopName  = itemView.findViewById(R.id.area_shop);
             lineAddresss  = itemView.findViewById(R.id.line_address);
-            lastPurchase = itemView.findViewById(R.id.last_purchase);
+//            lastPurchase = itemView.findViewById(R.id.last_purchase);
         }
     }
 }

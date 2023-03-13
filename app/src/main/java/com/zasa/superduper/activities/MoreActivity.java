@@ -3,11 +3,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.zasa.superduper.Login.LoginActivity;
 import com.zasa.superduper.R;
+import com.zasa.superduper.helpers.PreferencesData;
 
 
 public class MoreActivity extends AppCompatActivity  {
@@ -29,15 +32,31 @@ public class MoreActivity extends AppCompatActivity  {
 
         context = MoreActivity.this;
 
-        /*more_shareApp_btn = view.findViewById(R.id.more_shareApp_btn);
-        more_shareApp_btn.setOnClickListener(this);*/
+        more_logout_btn = findViewById(R.id.more_logout_btn);
+        more_logout_btn.setOnClickListener(new View.OnClickListener() {
+                                               @Override
+                                               public void onClick(View view) {
+                                                   PreferencesData.saveString(MoreActivity.this, "token_id",null);
+                                                   PreferencesData.saveString(MoreActivity.this, "isLogged","no");
+                                                   SharedPreferences sharedPreferences = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
+                                                   SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                   editor.putBoolean("hasLoggedIn", false);
+                                                   Intent intent = new Intent(MoreActivity.this,LoginActivity.class);
+                                                   intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                   intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                                    startActivity(intent);
+                                                    finish();
+
+                                               }
+                                           }
+        );
 
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(MoreActivity.this, HomeActivity.class));
+//        startActivity(new Intent(MoreActivity.this, HomeActivity.class));
         overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         finish();
     }

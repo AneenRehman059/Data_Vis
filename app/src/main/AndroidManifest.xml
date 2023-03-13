@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zasa.superduper">
-
+    <queries>
+        <!-- Camera -->
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+    </queries>
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.location.gps" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -23,14 +29,19 @@
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@drawable/superduperlogo"
+        android:icon="@drawable/app_icon"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:name=".MyApp"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@drawable/superduperlogo"
+        android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.LoyaltyBunch"
         android:usesCleartextTraffic="true">
+
+        <activity
+            android:name=".activities.ShowQuestionListActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.NumericActivity"
             android:exported="false" />
@@ -44,10 +55,10 @@
             android:name=".activities.QuestionActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.After_Checkout"
+            android:name=".activities.Survey_Activity"
             android:exported="false" />
         <activity
-            android:name=".activities.CheckOut_Activity"
+            android:name=".activities.Compaign_Activity"
             android:exported="false" />
         <activity
             android:name=".activities.TrackOperationPlaceActivity"
@@ -88,7 +99,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".activities.OperationActivity"
+            android:name=".activities.RoutesActivity"
             android:exported="false"
             android:theme="@style/NoActionBar">
             <meta-data

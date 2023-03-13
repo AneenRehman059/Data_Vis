@@ -17,7 +17,7 @@
         android:textStyle="bold"
         android:textColor="@color/secondary"
         android:layout_centerInParent="true"
-        android:text="Welcome in Online \n Customer Tracking"/>
+        android:text="Welcome to \n DataViz"/>
 
     <ProgressBar
         android:id="@+id/progressbar"

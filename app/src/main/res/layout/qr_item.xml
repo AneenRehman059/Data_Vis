@@ -14,18 +14,21 @@
             android:id="@+id/txt_catego"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_5sdp"
-            android:text="Rose Petal"
+            android:textSize="@dimen/_16ssp"
+            android:fontFamily="@font/gilory_semibold"
+            android:text="@string/rose_petal"
             android:textColor="@color/black"
-            android:textStyle="bold" />
+           />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_5sdp"
+            android:fontFamily="@font/gilory_semibold"
+            android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_30sdp"
-            android:text="Scan Freezer QR" />
+            android:text="@string/scan_freezer_qr" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,14 +40,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/qr_code"
                 android:layout_gravity="center"
+                android:layout_marginRight="@dimen/_5sdp"
                 android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_marginBottom="@dimen/_5sdp"
                 android:layout_weight="2"
                 android:background="@drawable/edt_backround"
-                android:padding="@dimen/_5sdp"
-                android:text="101100010101" />
+                android:padding="@dimen/_7sdp"
+                android:text="051111407592" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_qr"
@@ -63,5 +68,4 @@
             android:text="" />
 
     </androidx.cardview.widget.CardView>
-
 </LinearLayout>

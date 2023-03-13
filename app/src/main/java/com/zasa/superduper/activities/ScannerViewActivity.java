@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
@@ -19,6 +20,7 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.zasa.superduper.Models.Question_Model;
 import com.zasa.superduper.R;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -26,7 +28,11 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 public class ScannerViewActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler{
     Context context;
     ProgressDialog progressDialog;
-    String code;
+
+    // static variable call by refrence //
+
+    public static TextView code;
+    public static Question_Model questionModel;
     View view;
     ZXingScannerView zXingScannerView;
     ImageView flashOn, flashOff;
@@ -51,12 +57,14 @@ public class ScannerViewActivity extends AppCompatActivity implements ZXingScann
 
     @Override
     public void handleResult(Result rawResult) {
-        code = rawResult.getText();
-        Toast.makeText(context, "" + code, Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent(context, QuestionActivity.class);
-        intent.putExtra("code", code);
-        startActivity(intent);
+        code.setText(rawResult.getText());
+        questionModel.setAnswer(rawResult.getText());
+//        Toast.makeText(context, "" + code, Toast.LENGTH_SHORT).show();
+//
+//        Intent intent = new Intent(context, QuestionActivity.class);
+//        intent.putExtra("code", code);
+//        startActivity(intent);
+        finish();
     }
 
     @Override
