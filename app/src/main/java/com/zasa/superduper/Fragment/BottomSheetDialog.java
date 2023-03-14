@@ -1,5 +1,6 @@
 package com.zasa.superduper.Fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -26,11 +27,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-
 public class BottomSheetDialog extends BottomSheetDialogFragment implements MyCallBack {
     RecyclerView recyclerView_shopList;
     ArrayList<ShopList_Model> shopList = new ArrayList<>();
     String api_Token;
+
     public BottomSheetDialog() {
         // Required empty public constructor
     }
@@ -42,19 +43,18 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements MyCa
         View view = inflater.inflate(R.layout.fragment_bottom_sheet_dialog, container, false);
 
         recyclerView_shopList = view.findViewById(R.id.rv_shopList);
-        TextView lbl = (TextView)view.findViewById(R.id.tvLabelBtnSheet);
+        TextView lbl = (TextView) view.findViewById(R.id.tvLabelBtnSheet);
         lbl.setText(TrackOperationPlaceActivity.route);
         SharedPreferences sharedPreferenc = getActivity().getSharedPreferences(LoginActivity.PREFS_NAME, 0);
         SharedPreferences.Editor editor1 = sharedPreferenc.edit();
-        api_Token = String.valueOf(editor1.putString("token_id",""));
+        api_Token = String.valueOf(editor1.putString("token_id", ""));
 
         getShopList();
-
         return view;
     }
 
     private void getShopList() {
-        ShopAppManager shopAppManager = new ShopAppManager(getActivity(),this);
+        ShopAppManager shopAppManager = new ShopAppManager(getActivity(), this);
         JSONObject shop_params = new JSONObject();
 
 //        ShopList_Adapter shopList_adapter = new ShopList_Adapter(shopList,getContext());
@@ -64,8 +64,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements MyCa
 //            TrackOperationPlaceActivity act = (TrackOperationPlaceActivity) getActivity();
             shop_params.put("route_id", TrackOperationPlaceActivity.routeId);
             shopAppManager.postRoutes(shop_params);
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             throw new RuntimeException(e);
         }
 
@@ -78,19 +77,17 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements MyCa
 
     @Override
     public void notify(Object obj, String type) {
-        if (type.equalsIgnoreCase("shops")){
-            shopList = (ArrayList<ShopList_Model>)obj;
+        if (type.equalsIgnoreCase("shops")) {
+            shopList = (ArrayList<ShopList_Model>) obj;
 
-            ShopList_Adapter shopList_adapter = new ShopList_Adapter(shopList,getContext());
+            ShopList_Adapter shopList_adapter = new ShopList_Adapter(shopList, getContext());
             recyclerView_shopList.setAdapter(shopList_adapter);
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
             recyclerView_shopList.setLayoutManager(layoutManager);
 
             shopList_adapter.notifyDataSetChanged();
-        }
-        else
-        {
+        } else {
             Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
         }
     }

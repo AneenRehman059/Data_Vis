@@ -45,15 +45,26 @@
                 android:layout_below="@id/store_name"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="@dimen/_120sdp"
+                android:layout_marginRight="60dp"
+                android:layout_marginBottom="@dimen/_3sdp"
+                android:background="@drawable/map_icon_bg"
+                android:elevation="5dp"
+                android:padding="@dimen/_6sdp"
+                android:src="@drawable/ic_phone" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/iv_map"
+                android:layout_below="@id/store_name"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="@dimen/_120sdp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="@dimen/_3sdp"
                 android:background="@drawable/map_icon_bg"
                 android:elevation="5dp"
                 android:padding="@dimen/_4sdp"
-                android:src="@drawable/ic_phone" />
-
-
-
+                android:src="@drawable/location_on_24" />
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

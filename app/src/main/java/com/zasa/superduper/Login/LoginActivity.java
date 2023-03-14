@@ -121,7 +121,6 @@ public class LoginActivity extends AppCompatActivity implements MyCallBack {
                 throw new RuntimeException(e);
             }
 
-
 //        progressDialog.show();
 
 //        finish();

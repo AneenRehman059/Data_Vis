@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.zasa.superduper.Adapters.Routes_Adapter;
@@ -31,7 +34,7 @@ public class RoutesActivity extends AppCompatActivity implements MyCallBack {
     private static final String PREF_DATE = "prf_date";
     ArrayList<Routes_Model> operationList = new ArrayList<>();
     RecyclerView operation_rv;
-
+    ImageView btn_back;
     private int layout = 1;
     String api_Token;
 
@@ -51,6 +54,13 @@ public class RoutesActivity extends AppCompatActivity implements MyCallBack {
         editor.apply();
 
         operation_rv = findViewById(R.id.rv_opeartion);
+        btn_back = findViewById(R.id.backBtn);
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         //////// this get save date in splash activty and compare with current date ///////
         sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);

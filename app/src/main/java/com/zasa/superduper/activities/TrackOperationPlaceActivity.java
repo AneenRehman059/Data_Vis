@@ -38,6 +38,7 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.zasa.superduper.Fragment.BottomSheetDialog;
+//import com.zasa.superduper.MyInfoWindowAdapter;
 import com.zasa.superduper.MyInfoWindowAdapter;
 import com.zasa.superduper.R;
 
@@ -162,12 +163,25 @@ public class TrackOperationPlaceActivity extends AppCompatActivity implements On
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
+//        LatLng gourmetGhalibMarket = new LatLng(31.5324454,74.2987515);
+//        mMap.addMarker(new MarkerOptions().position(gourmetGhalibMarket).title("Gourmet Ghalib Market"));
+//        mMap.addMarker(new MarkerOptions().position(new LatLng(31.5325822,74.2987514)).title("Gourmet Mini Market"));
+//        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+//        mMap.setInfoWindowAdapter(new MyInfoWindowAdapter(TrackOperationPlaceActivity.this));
         for (int i = 0;i<arrayList.size(); i++){
 
             for (int j =0;j<title.size();j++){
                 mMap.addMarker(new MarkerOptions().position(arrayList.get(i)).title(String.valueOf(title.get(j))));
             }
             mMap.moveCamera(CameraUpdateFactory.newLatLng(arrayList.get(i)));
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(@NonNull Marker marker) {
+                    marker.showInfoWindow();
+                    Toast.makeText(TrackOperationPlaceActivity.this, marker.getTitle(), Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            });
         }
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.animateCamera(CameraUpdateFactory.zoomTo(17.0f));

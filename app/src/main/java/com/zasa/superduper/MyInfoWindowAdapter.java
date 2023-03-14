@@ -22,8 +22,8 @@ public class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     @Override
     public View getInfoContents(@NonNull Marker marker) {
         View infoView = LayoutInflater.from(context).inflate(R.layout.custom_info, null);
-        TextView title = infoView.findViewById(R.id.title);
-        TextView snipp = infoView.findViewById(R.id.snipp);
+        TextView title = infoView.findViewById(R.id.titles);
+        TextView snipp = infoView.findViewById(R.id.snipps);
         title.setText(marker.getTitle());
         snipp.setText(marker.getSnippet());
         return infoView;

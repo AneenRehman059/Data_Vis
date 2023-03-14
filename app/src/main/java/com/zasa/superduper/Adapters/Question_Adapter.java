@@ -109,14 +109,12 @@ public class Question_Adapter extends RecyclerView.Adapter implements Question_A
 
         if (questionList.get(position).getType().equalsIgnoreCase("Text")) {
 
-
             ViewHolderText viewHolderText = (ViewHolderText) holder;
             viewHolderText.txt_cate.setText(model.getQuestion_name());
             // setTag object lay ga. is main hum position set karwain gay
             viewHolderText.myCustomEditTextListener.updatePosition(position);
 //            viewHolderText.ed_number.setTag(position);
             viewHolderText.ed_number.setText(model.getAnswer());
-
 
         } else if (questionList.get(position).getType().equalsIgnoreCase("Image")) {
             PicViewHolder viewHolderPic = (PicViewHolder) holder;
@@ -153,8 +151,6 @@ public class Question_Adapter extends RecyclerView.Adapter implements Question_A
 
                 }
             });
-
-
         } else {
             ViewHolder viewHolder = (ViewHolder) holder;
             viewHolder.tv_question.setText(model.getQuestion_name());
