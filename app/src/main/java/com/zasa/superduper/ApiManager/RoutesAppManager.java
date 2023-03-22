@@ -1,7 +1,12 @@
 package com.zasa.superduper.ApiManager;
 
+import static com.zasa.superduper.helpers.LocalDB.ROUTES_TABLE;
+import static com.zasa.superduper.helpers.LocalDB.SHOPS_TABLE;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -14,6 +19,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.zasa.superduper.Models.Routes_Model;
 import com.zasa.superduper.MyCallBack;
+import com.zasa.superduper.helpers.LocalDB;
 import com.zasa.superduper.helpers.PreferencesData;
 import com.zasa.superduper.retrofit.ApiEndpoints;
 
@@ -40,15 +46,15 @@ public class RoutesAppManager {
     public String selectedGridDate;
     RequestQueue requestQueue;
     ProgressDialog progressDialog;
+    LocalDB localDB;
 
     public RoutesAppManager(Activity parentActivity, MyCallBack callBack) {
         this.parentActivity = parentActivity;
         this.callBack = callBack;
     }
 
-    public void postRoutes(final JSONObject requestParams) {
+    public void postRoutes() {
 
-        jRequestParam = requestParams;
         requestQueue = Volley.newRequestQueue(this.parentActivity);
 
         JSONObject jobj = new JSONObject();
@@ -56,15 +62,17 @@ public class RoutesAppManager {
         progressDialog.setTitle("Loading");
         progressDialog.show();
 
+        localDB = new LocalDB(parentActivity);
+        String user_id = PreferencesData.getString(parentActivity,"user_id","");
+
         try {
             jobj.put("request", jRequestParam);
-
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.GET, ApiEndpoints.GetRoutesURL, null,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.GET, ApiEndpoints.GetRoutesURL+"/"+user_id, null,
 
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -72,26 +80,44 @@ public class RoutesAppManager {
 
                         try {
 
-                            if(response.has("routes")){
+                            if (response.has("routes")) {
                                 // Set Api's Data Here
                                 JSONArray jSurveys = response.getJSONArray("routes");
                                 ArrayList<Routes_Model> operationList = new ArrayList<>();
                                 for (int i = 0; i < jSurveys.length(); i++) {
-                                    Routes_Model routes_model = new Routes_Model(jSurveys.getJSONObject(i).getString("route_name"));
-                                    routes_model.setRoute_id(jSurveys.getJSONObject(i).getString("route_id"));
+
+                                    Routes_Model routes_model = new Routes_Model(jSurveys.getJSONObject(i).getString("route_name"), jSurveys.getJSONObject(i).getInt("town_id"), "", "", "", "", "", jSurveys.getJSONObject(i).getInt("town_id"));
+                                    routes_model.setRoute_id(jSurveys.getJSONObject(i).getInt("route_id"));
 //                                    JSONObject jsonObject =
 //                                    jCompaigns.getJSONObject(i).getString("compaign_name");
                                     operationList.add(routes_model);
 
+                                    ContentValues contentValues = new ContentValues();
+                                    SQLiteDatabase db = localDB.getWritableDatabase();
+                                    contentValues.put("route_id", operationList.get(i).getRoute_id());
+                                    contentValues.put("route_code", operationList.get(i).getRoute_code());
+                                    contentValues.put("route_name", operationList.get(i).getRoute_name());
+                                    contentValues.put("route_description", operationList.get(i).getRoute_description());
+                                    contentValues.put("route_status", operationList.get(i).getRoute_status());
+                                    contentValues.put("created_at", operationList.get(i).getCreated_at());
+                                    contentValues.put("updated_at", operationList.get(i).getUpdated_at());
+                                    contentValues.put("town_id", operationList.get(i).getTown_id());
 
-
+                                    long addData = db.update(ROUTES_TABLE,contentValues, "route_id=" +operationList.get(i).getRoute_id(),null);
+                                    if (addData != -1){
+//                                        Toast.makeText(parentActivity, "Already Exists", Toast.LENGTH_SHORT).show();
+                                    }
+                                    else
+                                    {
+                                        db.insert(ROUTES_TABLE, null, contentValues);
+                                    }
                                 }
 
-                                callBack.notify(operationList,"routes");
+                                callBack.notify(operationList, "routes");
 //                                callBack.notify(response.getJSONObject("user_info"),"login");
-                            }else{
+                            } else {
 
-                                if(!parentActivity.isFinishing())
+                                if (!parentActivity.isFinishing())
                                     Toast.makeText(parentActivity, response.get("message").toString(), Toast.LENGTH_SHORT).show();
                             }
                         } catch (Exception ex) {
@@ -113,14 +139,14 @@ public class RoutesAppManager {
                         if (error.getMessage() != null)
                             em = error.getMessage();
                         ArrayList<Routes_Model> operationList = new ArrayList<>();
-                        operationList.add(new Routes_Model("Gulberg"));
-                        operationList.add(new Routes_Model("Johar Town "));
-                        operationList.add(new Routes_Model("Defense Phase I"));
-                        operationList.add(new Routes_Model("Mughal Pura"));
-                        operationList.add(new Routes_Model("BaghbanPura"));
-                        operationList.add(new Routes_Model("Paragon City"));
-                        operationList.add(new Routes_Model("Lahore Cant"));
-                        operationList.add(new Routes_Model("Model Town"));
+                        operationList.add(new Routes_Model("Gulberg", 1, "", "", "", "", "", 1));
+                        operationList.add(new Routes_Model("Johar Town ", 1, "", "", "", "", "", 1));
+                        operationList.add(new Routes_Model("Defense Phase I", 1, "", "", "", "", "", 1));
+                        operationList.add(new Routes_Model("Mughal Pura", 1, "", "", "", "", "", 1));
+                        operationList.add(new Routes_Model("BaghbanPura", 1, "", "", "", "", "", 1));
+                        operationList.add(new Routes_Model("Paragon City", 1, "", "", "", "", "", 1));
+                        operationList.add(new Routes_Model("Lahore Cant", 1, "", "", "", "", "", 1));
+                        operationList.add(new Routes_Model("Model Town", 1, "", "", "", "", "", 1));
 
                         callBack.notify(operationList, "routes");
 

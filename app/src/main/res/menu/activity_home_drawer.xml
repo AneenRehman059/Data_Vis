@@ -28,6 +28,10 @@
             android:id="@+id/setting"
             android:icon="@drawable/setting"
             android:title="Setting" />
+        <item
+            android:id="@+id/attendance"
+            android:icon="@drawable/attendance"
+            android:title="Daily Attendance" />
 
         <item
             android:id="@+id/logout"

@@ -42,6 +42,12 @@
         android:theme="@style/Theme.LoyaltyBunch"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activities.DailyAttendenceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.AddShopsActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.ShopLocationActivity"
             android:exported="false" />
         <activity

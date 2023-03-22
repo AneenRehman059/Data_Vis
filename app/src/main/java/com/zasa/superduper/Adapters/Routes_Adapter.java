@@ -2,6 +2,7 @@ package com.zasa.superduper.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +20,14 @@ import java.util.ArrayList;
 public class Routes_Adapter extends RecyclerView.Adapter<Routes_Adapter.viewHolder> {
     ArrayList<Routes_Model> operationList;
     Context context;
-    String route_name,route_id;
+    SQLiteDatabase sqLiteDatabase;
+    String route_name;
+    int route_id;
 
-    public Routes_Adapter(ArrayList<Routes_Model> operationList, Context context) {
+    public Routes_Adapter(ArrayList<Routes_Model> operationList, Context context, SQLiteDatabase sqLiteDatabase) {
         this.operationList = operationList;
         this.context = context;
+        this.sqLiteDatabase = sqLiteDatabase;
     }
 
     @NonNull
@@ -36,10 +40,10 @@ public class Routes_Adapter extends RecyclerView.Adapter<Routes_Adapter.viewHold
     @Override
     public void onBindViewHolder(@NonNull Routes_Adapter.viewHolder holder, int position) {
         Routes_Model model = operationList.get(position);
-        holder.areaName.setText(model.getAssign_area());
+        holder.areaName.setText(model.getRoute_name());
 
 
-        route_name = model.getAssign_area();
+        route_name = model.getRoute_name();
         route_id = model.getRoute_id();
 
 //        holder.shopName.setText(model.getAssign_shop());
@@ -50,10 +54,10 @@ public class Routes_Adapter extends RecyclerView.Adapter<Routes_Adapter.viewHold
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, TrackOperationPlaceActivity.class);
-                TrackOperationPlaceActivity.route =model.getAssign_area();
+                TrackOperationPlaceActivity.route =model.getRoute_name();
                 TrackOperationPlaceActivity.routeId = model.getRoute_id();
-                intent.putExtra(model.getAssign_area(),"route_name");
-                intent.putExtra(model.getRoute_id(),"routeID");
+                intent.putExtra("route_name",model.getRoute_name());
+                intent.putExtra("routeID",model.getRoute_id());
                 context.startActivity(intent);
             }
         });

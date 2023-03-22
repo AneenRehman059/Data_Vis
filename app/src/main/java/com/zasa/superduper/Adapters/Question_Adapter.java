@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -19,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,7 +34,6 @@ import com.zasa.superduper.Models.Question_Model;
 import com.zasa.superduper.MyCallBack;
 import com.zasa.superduper.MyFunctions;
 import com.zasa.superduper.R;
-import com.zasa.superduper.activities.CaptureImageActivity;
 import com.zasa.superduper.activities.QuestionActivity;
 import com.zasa.superduper.activities.ScannerViewActivity;
 
@@ -48,6 +47,7 @@ public class Question_Adapter extends RecyclerView.Adapter implements Question_A
     private static final String SHARED_PREF_NAME = "mypref";
 
     public ArrayList<Question_Model> getQuestionList() {
+
         return questionList;
     }
 
@@ -58,26 +58,31 @@ public class Question_Adapter extends RecyclerView.Adapter implements Question_A
     private final int REQUEST_GALLERY = 5464;
     private MyFunctions myFunctions;
     private MyCallBack myCallBack;
-    private String vOnly="no";
-    public Question_Adapter(ArrayList<Question_Model> questionList, Context context, MyCallBack myCallBack,String viewOnly) {
+    private String vOnly = "no";
+    SQLiteDatabase sqLiteDatabase;
+
+    public Question_Adapter(ArrayList<Question_Model> questionList, Context context, MyCallBack myCallBack, String viewOnly, SQLiteDatabase sqLiteDatabase) {
         this.questionList = questionList;
         this.context = context;
         myFunctions = new MyFunctions(context);
         this.myCallBack = myCallBack;
         this.vOnly = viewOnly;
+        this.sqLiteDatabase = sqLiteDatabase;
     }
 
     @Override
     public int getItemViewType(int position) {
 
-        if (questionList.get(position).getType().equalsIgnoreCase("Text"))
+        if (questionList.get(position).getQuestion_type().equalsIgnoreCase("Text"))
             return 1;
-        else if (questionList.get(position).getType().equalsIgnoreCase("Image"))
+        else if (questionList.get(position).getQuestion_type().equalsIgnoreCase("Image"))
             return 2;
-        else if (questionList.get(position).getType().equalsIgnoreCase("qr"))
+        else if (questionList.get(position).getQuestion_type().equalsIgnoreCase("qr"))
             return 3;
+        else if (questionList.get(position).getQuestion_type().equalsIgnoreCase("numeric"))
+            return 4;
         else
-            questionList.get(position).getType().equalsIgnoreCase("");
+            questionList.get(position).getQuestion_type().equalsIgnoreCase("");
 
         return super.getItemViewType(position);
     }
@@ -89,16 +94,21 @@ public class Question_Adapter extends RecyclerView.Adapter implements Question_A
         View view;
         if (viewType == 1) {
             view = layoutInflater.inflate(R.layout.textitem, parent, false);
-            return new ViewHolderText(view, new MyCustomEditTextListener(),vOnly);
+            return new ViewHolderText(view, new MyCustomEditTextListener(), vOnly);
         } else if (viewType == 2) {
             view = layoutInflater.inflate(R.layout.image_item, parent, false);
-            return new PicViewHolder(view,vOnly);
+            return new PicViewHolder(view, vOnly);
         } else if (viewType == 3) {
             view = layoutInflater.inflate(R.layout.qr_item, parent, false);
-            return new ViewHolderQr(view,vOnly);
-        } else
+            return new ViewHolderQr(view, vOnly);
+        }
+        else if (viewType == 4){
+            view = layoutInflater.inflate(R.layout.numeric_item, parent, false);
+            return new ViewHolderQr(view, vOnly);
+        }
+        else
             view = layoutInflater.inflate(R.layout.each_item, parent, false);
-        return new ViewHolder(view,vOnly);
+        return new ViewHolder(view, vOnly);
     }
 
     @Override
@@ -107,7 +117,7 @@ public class Question_Adapter extends RecyclerView.Adapter implements Question_A
 
 //        holder.tv_question.setText(model.getQuestion_name());
 
-        if (questionList.get(position).getType().equalsIgnoreCase("Text")) {
+        if (questionList.get(position).getQuestion_type().equalsIgnoreCase("Text")) {
 
             ViewHolderText viewHolderText = (ViewHolderText) holder;
             viewHolderText.txt_cate.setText(model.getQuestion_name());
@@ -116,7 +126,7 @@ public class Question_Adapter extends RecyclerView.Adapter implements Question_A
 //            viewHolderText.ed_number.setTag(position);
             viewHolderText.ed_number.setText(model.getAnswer());
 
-        } else if (questionList.get(position).getType().equalsIgnoreCase("Image")) {
+        } else if (questionList.get(position).getQuestion_type().equalsIgnoreCase("Image")) {
             PicViewHolder viewHolderPic = (PicViewHolder) holder;
             viewHolderPic.txt_categ.setText(model.getQuestion_name());
 
@@ -134,7 +144,7 @@ public class Question_Adapter extends RecyclerView.Adapter implements Question_A
             viewHolderPic.recyclerView.setLayoutManager(new GridLayoutManager(context, 3));   //ctl+p to know parameters
             viewHolderPic.recyclerView.setAdapter(adapterShowImages);
 
-        } else if (questionList.get(position).getType().equalsIgnoreCase("qr")) {
+        } else if (questionList.get(position).getQuestion_type().equalsIgnoreCase("qr")) {
             ViewHolderQr viewHolderQr = (ViewHolderQr) holder;
             viewHolderQr.txt_catego.setText(model.getQuestion_name());
             viewHolderQr.qr_code.setText(model.getAnswer());
@@ -145,13 +155,17 @@ public class Question_Adapter extends RecyclerView.Adapter implements Question_A
 
                     Intent intent = new Intent(context, ScannerViewActivity.class);
                     ScannerViewActivity.questionModel = questionList.get(position);
-                    ScannerViewActivity.code =viewHolderQr.qr_code;
+                    ScannerViewActivity.code = viewHolderQr.qr_code;
                     context.startActivity(intent);
 
 
                 }
             });
-        } else {
+        }
+        else if (questionList.get(position).getQuestion_type().equalsIgnoreCase("numeric")){
+            ViewHolderNumeric viewHolderNumeric = (ViewHolderNumeric) holder;
+        }
+        else {
             ViewHolder viewHolder = (ViewHolder) holder;
             viewHolder.tv_question.setText(model.getQuestion_name());
         }
@@ -179,21 +193,7 @@ public class Question_Adapter extends RecyclerView.Adapter implements Question_A
                                         .show();
                             })
                             .ask();
-                } else if (items[i].equals("Choose Image")) {
-                    RuntimePermission.askPermission((FragmentActivity) context)
-                            .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            .onAccepted(result -> {
-                                onClickGallery();
-                            })
-                            .onDenied(result -> {
-                                new android.app.AlertDialog.Builder(context)
-                                        .setMessage("Please accept our permissions")
-                                        .setPositiveButton("yes", (dialog1, which) -> result.askAgain()) // ask again
-                                        .setNegativeButton("no", (dialog1, which) -> dialog1.dismiss())
-                                        .show();
-                            })
-                            .ask();
-                } else {
+                }  else {
                     dialogInterface.dismiss();
                 }
             });
@@ -313,18 +313,23 @@ public class Question_Adapter extends RecyclerView.Adapter implements Question_A
         TextView txt_cate;
         MyCustomEditTextListener myCustomEditTextListener;
 
-        public ViewHolderText(@NonNull View itemView , MyCustomEditTextListener myCustomEditTextListener1,String viewOnly) {
+        public ViewHolderText(@NonNull View itemView, MyCustomEditTextListener myCustomEditTextListener1, String viewOnly) {
             super(itemView);
 
             ed_number = itemView.findViewById(R.id.edt_enter_number);
             txt_cate = itemView.findViewById(R.id.txt_cate);
             this.myCustomEditTextListener = myCustomEditTextListener1;
             ed_number.addTextChangedListener(myCustomEditTextListener);
-            if(viewOnly.equalsIgnoreCase("yes")){
+            if (viewOnly.equalsIgnoreCase("yes")) {
                 ed_number.setEnabled(false);
                 ed_number.setFocusable(false);
-
             }
+        }
+    }
+
+    class ViewHolderNumeric extends RecyclerView.ViewHolder {
+        public ViewHolderNumeric(@NonNull View itemView) {
+            super(itemView);
         }
     }
 
@@ -334,13 +339,13 @@ public class Question_Adapter extends RecyclerView.Adapter implements Question_A
         MaterialButton btn_iv;
         RecyclerView recyclerView;
 
-        public PicViewHolder(@NonNull View itemView,String viewOnly) {
+        public PicViewHolder(@NonNull View itemView, String viewOnly) {
             super(itemView);
 
             btn_iv = itemView.findViewById(R.id.btn_captureImage);
             txt_categ = itemView.findViewById(R.id.txt_categ);
             recyclerView = itemView.findViewById(R.id.item_images_rcv);
-            if(viewOnly.equalsIgnoreCase("yes")){
+            if (viewOnly.equalsIgnoreCase("yes")) {
                 btn_iv.setEnabled(false);
                 btn_iv.setVisibility(View.INVISIBLE);
 
@@ -352,13 +357,13 @@ public class Question_Adapter extends RecyclerView.Adapter implements Question_A
         Button btn_qr;
         TextView txt_catego, qr_code;
 
-        public ViewHolderQr(@NonNull View itemView,String viewOnly) {
+        public ViewHolderQr(@NonNull View itemView, String viewOnly) {
             super(itemView);
 
             btn_qr = itemView.findViewById(R.id.btn_qr);
             txt_catego = itemView.findViewById(R.id.txt_catego);
             qr_code = itemView.findViewById(R.id.qr_code);
-            if(viewOnly.equalsIgnoreCase("yes")){
+            if (viewOnly.equalsIgnoreCase("yes")) {
                 btn_qr.setEnabled(false);
                 btn_qr.setVisibility(View.INVISIBLE);
 
@@ -371,7 +376,7 @@ public class Question_Adapter extends RecyclerView.Adapter implements Question_A
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_question;
 
-        public ViewHolder(@NonNull View itemView,String viewOnly) {
+        public ViewHolder(@NonNull View itemView, String viewOnly) {
             super(itemView);
 
             tv_question = itemView.findViewById(R.id.txt_categories);
@@ -395,7 +400,7 @@ public class Question_Adapter extends RecyclerView.Adapter implements Question_A
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-            questionList.get(text_position).setAnswer( charSequence.toString());
+            questionList.get(text_position).setAnswer(charSequence.toString());
         }
 
         @Override

@@ -1,7 +1,11 @@
 package com.zasa.superduper.ApiManager;
 
+import static com.zasa.superduper.helpers.LocalDB.QUESTIONS_TABLE;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -13,9 +17,9 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.zasa.superduper.Models.Category_Model;
 import com.zasa.superduper.Models.Question_Model;
 import com.zasa.superduper.MyCallBack;
+import com.zasa.superduper.helpers.LocalDB;
 import com.zasa.superduper.helpers.PreferencesData;
 import com.zasa.superduper.retrofit.ApiEndpoints;
 
@@ -44,13 +48,14 @@ public class QuestionsAppManager {
     public String selectedGridDate;
     RequestQueue requestQueue;
     ProgressDialog progressDialog;
+    LocalDB localDB;
 
     public QuestionsAppManager(Activity parentActivity, MyCallBack callBack) {
         this.parentActivity = parentActivity;
         this.callBack = callBack;
     }
 
-    public void postQuestions(final JSONObject requestParams) {
+    public void getSurveyQuestions(final JSONObject requestParams) {
 
         jRequestParam = requestParams;
         requestQueue = Volley.newRequestQueue(this.parentActivity);
@@ -59,6 +64,7 @@ public class QuestionsAppManager {
         progressDialog = new ProgressDialog(this.parentActivity);
         progressDialog.setTitle("Loading");
         progressDialog.show();
+        localDB = new LocalDB(parentActivity);
 
         try {
             jobj.put("request",jRequestParam);
@@ -84,8 +90,21 @@ public class QuestionsAppManager {
                                 for (int i = 0; i < jQuestions.length(); i++) {
 //                                    JSONObject jsonObject =
 //                                    jCompaigns.getJSONObject(i).getString("compaign_name");
-                                    questionList.add(new Question_Model(jQuestions.getJSONObject(i).getString("question_name"),jQuestions.getJSONObject(i).getString("question_type")));
+                                    questionList.add(new Question_Model(jQuestions.getJSONObject(i).getInt("question_id"),"",jQuestions.getJSONObject(i).getString("question_name"),"","",jQuestions.getJSONObject(i).getString("question_type"),"","",jQuestions.getJSONObject(i).getInt("survey_id")));
 
+                                    ContentValues contentValues = new ContentValues();
+                                    SQLiteDatabase db = localDB.getWritableDatabase();
+                                    contentValues.put("question_id", questionList.get(i).getQuestion_id());
+                                    contentValues.put("question_code", questionList.get(i).getQuestion_code());
+                                    contentValues.put("question_name", questionList.get(i).getQuestion_name());
+                                    contentValues.put("question_description", questionList.get(i).getQuestion_description());
+                                    contentValues.put("question_status", questionList.get(i).getQuestion_status());
+                                    contentValues.put("question_type", questionList.get(i).getQuestion_type());
+                                    contentValues.put("created_at", questionList.get(i).getCreated_at());
+                                    contentValues.put("updated_at", questionList.get(i).getUpdated_at());
+                                    contentValues.put("survey_id", questionList.get(i).getSurvey_id());
+
+                                    db.insert(QUESTIONS_TABLE, null, contentValues);
                                 }
 
                                 callBack.notify(questionList,"questions");
@@ -116,15 +135,16 @@ public class QuestionsAppManager {
                         if(error.getMessage()!=null)
                             em=error.getMessage();
                         ArrayList<Question_Model> questionList = new ArrayList<>();
-                        questionList.add(new Question_Model("Rose Patel","text"));
-                        questionList.add(new Question_Model("Tulip","picture"));
-                        questionList.add(new Question_Model("Maxob","qr"));
-                        questionList.add(new Question_Model("Competitors","text"));
-                        questionList.add(new Question_Model("Competitors","picture"));
-                        questionList.add(new Question_Model("Competitors","qr"));
-                        questionList.add(new Question_Model("Rose Patel","text"));
-                        questionList.add(new Question_Model("Rose Patel","picture"));
-                        questionList.add(new Question_Model("Rose Patel","qr"));
+                        questionList.add(new Question_Model(1,"","Rose Patel","","","text","","",1));
+                        questionList.add(new Question_Model(1,"","Tulip","","","picture","","",1));
+                        questionList.add(new Question_Model(1,"","Maxob","","","qr","","",1));
+                        questionList.add(new Question_Model(1,"","Competitors","","","text","","",1));
+                        questionList.add(new Question_Model(1,"","Competitors","","","picture","","",1));
+                        questionList.add(new Question_Model(1,"","Competitors","","","qr","","",1));
+                        questionList.add(new Question_Model(1,"","Rose Patel","","","text","","",1));
+                        questionList.add(new Question_Model(1,"","Rose Patel","","","picture","","",1));
+                        questionList.add(new Question_Model(1,"","Rose Patel","","","qr","","",1));
+
                         callBack.notify(questionList,"questions");
 
 

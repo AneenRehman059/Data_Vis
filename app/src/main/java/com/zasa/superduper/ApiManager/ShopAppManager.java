@@ -1,7 +1,12 @@
 package com.zasa.superduper.ApiManager;
 
+import static com.zasa.superduper.helpers.LocalDB.ROUTES_TABLE;
+import static com.zasa.superduper.helpers.LocalDB.SHOPS_TABLE;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -15,6 +20,7 @@ import com.android.volley.toolbox.Volley;
 import com.zasa.superduper.Models.Routes_Model;
 import com.zasa.superduper.Models.ShopList_Model;
 import com.zasa.superduper.MyCallBack;
+import com.zasa.superduper.helpers.LocalDB;
 import com.zasa.superduper.helpers.PreferencesData;
 import com.zasa.superduper.retrofit.ApiEndpoints;
 
@@ -29,12 +35,9 @@ import java.util.Map;
 public class ShopAppManager {
 
     private static final String TAG = "SyncManager";
-
-
     private Activity parentActivity;
 
     //private WebServiceObjectClient client;
-
     private MyCallBack callBack;
 
     private JSONObject jRequestParam;
@@ -42,13 +45,14 @@ public class ShopAppManager {
     public String selectedGridDate;
     RequestQueue requestQueue;
     ProgressDialog progressDialog;
+    LocalDB localDB ;
 
     public ShopAppManager(Activity parentActivity, MyCallBack callBack) {
         this.parentActivity = parentActivity;
         this.callBack = callBack;
     }
 
-    public void postRoutes(final JSONObject requestParams) {
+    public void getShops(final JSONObject requestParams) {
 
         jRequestParam = requestParams;
         requestQueue = Volley.newRequestQueue(this.parentActivity);
@@ -57,6 +61,9 @@ public class ShopAppManager {
         progressDialog = new ProgressDialog(this.parentActivity);
         progressDialog.setTitle("Loading");
         progressDialog.show();
+
+        localDB = new LocalDB(parentActivity);
+
         String urlParam="";
         try {
 //            jobj.put("request", jRequestParam);
@@ -81,7 +88,35 @@ public class ShopAppManager {
                                 for (int i = 0; i < jShops.length(); i++) {
 //                                    JSONObject jsonObject =
 //                                    jCompaigns.getJSONObject(i).getString("compaign_name");
-                                    shopList.add(new ShopList_Model(jShops.getJSONObject(i).getString("shop_name"), jShops.getJSONObject(i).getString("shop_description")));
+                                    shopList.add(new ShopList_Model(jShops.getJSONObject(i).getInt("shop_id"),"",jShops.getJSONObject(i).getString("shop_name"), "","","",jShops.getJSONObject(i).getInt("shop_owner_phone"),"","","",jShops.getJSONObject(i).getInt("channel_id"),jShops.getJSONObject(i).getInt("class_id"),jShops.getJSONObject(i).getInt("shop_category_id"),jShops.getJSONObject(i).getInt("shop_subcategory_id"),""));
+
+                                    ContentValues contentValues = new ContentValues();
+                                    SQLiteDatabase db = localDB.getWritableDatabase();
+                                    contentValues.put("shop_id",shopList.get(i).getShop_id());
+                                    contentValues.put("shop_code",shopList.get(i).getShop_code());
+                                    contentValues.put("shop_name",shopList.get(i).getShop_name());
+                                    contentValues.put("shop_description",shopList.get(i).getShop_description());
+                                    contentValues.put("shop_status",shopList.get(i).getShop_status());
+                                    contentValues.put("shop_owner_name",shopList.get(i).getShop_owner_name());
+                                    contentValues.put("shop_owner_phone",shopList.get(i).getShop_owner_phone());
+                                    contentValues.put("shop_owner_status",shopList.get(i).getShop_owner_status());
+                                    contentValues.put("created_at",shopList.get(i).getCreated_at());
+                                    contentValues.put("updated_at",shopList.get(i).getUpdated_at());
+                                    contentValues.put("channel_id",shopList.get(i).getChannel_id());
+                                    contentValues.put("class_id",shopList.get(i).getClass_id());
+                                    contentValues.put("shop_category_id",shopList.get(i).getShop_category_id());
+                                    contentValues.put("shop_subcategory_id",shopList.get(i).getShop_subcategory_id());
+                                    contentValues.put("shop_address",shopList.get(i).getShop_address());
+
+                                   long addData = db.update(SHOPS_TABLE,contentValues, "shop_id=" +shopList.get(i).getShop_id(),null);
+
+                                   if (addData != -1){
+//                                       Toast.makeText(parentActivity, "Already Exists", Toast.LENGTH_SHORT).show();
+                                   }
+                                   else
+                                   {
+                                       db.insert(SHOPS_TABLE,null,contentValues);
+                                   }
                                 }
 
                                 callBack.notify(shopList,"shops");
@@ -110,13 +145,13 @@ public class ShopAppManager {
                         if (error.getMessage() != null)
                             em = error.getMessage();
                         ArrayList<ShopList_Model> shopList = new ArrayList<>();
-                        shopList.add(new ShopList_Model("Bismillah General Store","Channel Name"));
-                        shopList.add(new ShopList_Model("Bismillah General Store","Channel Name"));
-                        shopList.add(new ShopList_Model("Bismillah General Store","Channel Name"));
-                        shopList.add(new ShopList_Model("Bismillah General Store","Channel Name"));
-                        shopList.add(new ShopList_Model("Bismillah General Store","Channel Name"));
-                        shopList.add(new ShopList_Model("Bismillah General Store","Channel Name"));
-                        shopList.add(new ShopList_Model("Bismillah General Store","Channel Name"));
+                        shopList.add(new ShopList_Model(1,"","Bismillah General Store","Channel Name","","",1234,"","","",1,1,1,1,""));
+                        shopList.add(new ShopList_Model(1,"","Bismillah General Store","Channel Name","","",1234,"","","",1,1,1,1,""));
+                        shopList.add(new ShopList_Model(1,"","Bismillah General Store","Channel Name","","",1234,"","","",1,1,1,1,""));
+                        shopList.add(new ShopList_Model(1,"","Bismillah General Store","Channel Name","","",1234,"","","",1,1,1,1,""));
+                        shopList.add(new ShopList_Model(1,"","Bismillah General Store","Channel Name","","",1234,"","","",1,1,1,1,""));
+                        shopList.add(new ShopList_Model(1,"","Bismillah General Store","Channel Name","","",1234,"","","",1,1,1,1,""));
+                        shopList.add(new ShopList_Model(1,"","Bismillah General Store","Channel Name","","",1234,"","","",1,1,1,1,""));
 
                         callBack.notify(shopList, "shops");
 

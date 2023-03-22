@@ -1,13 +1,13 @@
 package com.zasa.superduper.activities;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,13 +18,13 @@ import android.widget.Toast;
 import com.zasa.superduper.Adapters.Compaign_Adapter;
 import com.zasa.superduper.ApiManager.CompaignAppManager;
 import com.zasa.superduper.Login.LoginActivity;
-import com.zasa.superduper.Models.Compaign_Module_Model;
+import com.zasa.superduper.Models.Compaign_Model;
 import com.zasa.superduper.MyCallBack;
 import com.zasa.superduper.R;
+import com.zasa.superduper.helpers.LocalDB;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -35,7 +35,7 @@ public class Compaign_Activity extends AppCompatActivity implements MyCallBack {
     int count = 0;
     String apiToken;
     public static String storename;
-    ArrayList<Compaign_Module_Model> moduleList = new ArrayList<>();
+    ArrayList<Compaign_Model> moduleList = new ArrayList<>();
     Timer timer;
     TimerTask timerTask;
     Double time = 0.0;
@@ -43,6 +43,8 @@ public class Compaign_Activity extends AppCompatActivity implements MyCallBack {
     boolean clicked = false;
     TextView timerText;
     Button stopStartButton,checkOutButton;
+    LocalDB localDB ;
+    SQLiteDatabase sqLiteDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,8 @@ public class Compaign_Activity extends AppCompatActivity implements MyCallBack {
         timerText = findViewById(R.id.tvTimer);
         stopStartButton = findViewById(R.id.startStopButton);
         checkOutButton = findViewById(R.id.checkOutButton);
+
+        localDB = new LocalDB(Compaign_Activity.this);
 
         tvStorename.setText(storename);
         SharedPreferences sharedPreferenc = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
@@ -67,6 +71,29 @@ public class Compaign_Activity extends AppCompatActivity implements MyCallBack {
             @Override
             public void onClick(View view) {
                 clicked = true;
+            }
+        });
+
+        stopStartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                checkOutButton.setVisibility(View.VISIBLE);
+                stopStartButton.setVisibility(View.GONE);
+                if(timerStarted == false)
+                {
+//                    timerStarted = true;
+//                    setButtonUI("STOP", R.color.red);
+
+                    startTimer();
+                }
+                else
+                {
+//                    timerStarted = false;
+//                    setButtonUI("START", R.color.green);
+
+                    timerTask.cancel();
+                }
             }
         });
 
@@ -87,14 +114,14 @@ public class Compaign_Activity extends AppCompatActivity implements MyCallBack {
 
     private void setModuleItem() {
 
-
         CompaignAppManager checkOutAppManager = new CompaignAppManager(this,this);
         JSONObject compaign_params = new JSONObject();
         try {
             compaign_params.put("token",apiToken);
-            compaign_params.put("shop_id",getIntent().getExtras().getString("shop_id"));
+            compaign_params.put("shop_id",getIntent().getExtras().getInt("shop_id"));
 
-            checkOutAppManager.postCompaignLogin(getIntent().getExtras().getString("shop_id"));
+            checkOutAppManager.getShopCompaigns(""+getIntent().getExtras().getInt("shop_id"));
+
 //            Toast.makeText(this, apiToken, Toast.LENGTH_SHORT).show();
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -109,9 +136,11 @@ public class Compaign_Activity extends AppCompatActivity implements MyCallBack {
     @Override
     public void notify(Object obj, String type) {
         if (type.equalsIgnoreCase("questions")){
-            moduleList = (ArrayList<Compaign_Module_Model>)obj;
+            moduleList = (ArrayList<Compaign_Model>)obj;
 
-            Compaign_Adapter moduleAdapter = new Compaign_Adapter(moduleList, this);
+            moduleList = localDB.getCompains();
+
+            Compaign_Adapter moduleAdapter = new Compaign_Adapter(moduleList, this,sqLiteDatabase);
             rv_daily_operation_mod.setAdapter(moduleAdapter);
 
             GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
@@ -123,62 +152,11 @@ public class Compaign_Activity extends AppCompatActivity implements MyCallBack {
         }
     }
 
-    public void resetTapped(View view)
-    {
-        AlertDialog.Builder resetAlert = new AlertDialog.Builder(this);
-        resetAlert.setTitle("Reset Timer");
-        resetAlert.setMessage("Are you sure you want to reset the timer?");
-        resetAlert.setPositiveButton("Reset", new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i)
-            {
-                if(timerTask != null)
-                {
-                    timerTask.cancel();
-                    setButtonUI("START", R.color.green);
-                    time = 0.0;
-                    timerStarted = false;
-                    timerText.setText(formatTime(0,0,0));
 
-                }
-            }
-        });
 
-        resetAlert.setNeutralButton("Cancel", new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i)
-            {
-                //do nothing
-            }
-        });
-
-        resetAlert.show();
-
-    }
-
-    public void startStopTapped(View view)
-    {
-        if(timerStarted == false)
-        {
-            timerStarted = true;
-            setButtonUI("STOP", R.color.red);
-
-            startTimer();
-        }
-        else
-        {
-            timerStarted = false;
-            setButtonUI("START", R.color.green);
-
-            timerTask.cancel();
-        }
-    }
 
     private void setButtonUI(String start, int color)
     {
-        checkOutButton.setVisibility(View.VISIBLE);
         stopStartButton.setText(start);
         stopStartButton.setTextColor(ContextCompat.getColor(this, color));
     }

@@ -26,8 +26,8 @@
                 android:id="@+id/store_name"
                 android:text="Shop Name"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_12sdp"
-                android:textStyle="bold" />
+                android:textSize="@dimen/_14sdp"
+                android:fontFamily="@font/gilroy_bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -36,6 +36,7 @@
                     android:id="@+id/shop_description"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:text="Address"
+                    android:fontFamily="@font/gilory_semibold"
                     android:textColor="@color/black" />
 
             <ImageView
@@ -61,11 +62,32 @@
                 android:layout_marginLeft="@dimen/_120sdp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="@dimen/_3sdp"
+                android:fontFamily="@font/gilory_semibold"
                 android:background="@drawable/map_icon_bg"
                 android:elevation="5dp"
                 android:padding="@dimen/_4sdp"
                 android:src="@drawable/location_on_24" />
 
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilory_semibold"
+                android:layout_below="@+id/shop_description"
+                android:id="@+id/txt_shop_visitFrequency"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="Visit Frequency"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilory_semibold"
+                android:layout_below="@+id/txt_shop_visitFrequency"
+                android:id="@+id/txt_lastVisited_date"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="Last Visited Date"
+                android:textColor="@color/black" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 

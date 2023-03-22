@@ -1,15 +1,23 @@
 package com.zasa.superduper.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.zasa.superduper.activities.Compaign_Activity;
@@ -25,11 +33,13 @@ import java.util.Locale;
 public class ShopList_Adapter extends RecyclerView.Adapter<ShopList_Adapter.viewHolder> {
     ArrayList<ShopList_Model> shopList;
     Context context;
+    SQLiteDatabase sqLiteDatabase;
     String latitude,longitude;
 
-    public ShopList_Adapter(ArrayList<ShopList_Model> shopList, Context context) {
+    public ShopList_Adapter(ArrayList<ShopList_Model> shopList, Context context, SQLiteDatabase sqLiteDatabase) {
         this.shopList = shopList;
         this.context = context;
+        this.sqLiteDatabase = sqLiteDatabase;
     }
 
     @NonNull
@@ -72,12 +82,50 @@ public class ShopList_Adapter extends RecyclerView.Adapter<ShopList_Adapter.view
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, Compaign_Activity.class);
-                Compaign_Activity.storename = holder.txt_shop_name.getText().toString();
-                intent.putExtra("shop_id",model.getShop_id());
-                context.startActivity(intent);
+
+                ViewGroup viewGroup = view.findViewById(android.R.id.content);
+
+                ImageButton close;
+                Button btn_open_shop;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                View view1 = LayoutInflater.from(context).inflate(R.layout.shop_status_dialog,viewGroup,false);
+                builder.setCancelable(false);
+                builder.setView(view1);
+
+                close = view1.findViewById(R.id.btn_dialog);
+                btn_open_shop = view1.findViewById(R.id.btnOpenShop);
+
+                final AlertDialog alertDialog = builder.create();
+
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        alertDialog.dismiss();
+                    }
+                });
+
+                btn_open_shop.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(context, Compaign_Activity.class);
+                        Compaign_Activity.storename = holder.txt_shop_name.getText().toString();
+                        intent.putExtra("shop_id",model.getShop_id());
+                        context.startActivity(intent);
+                    }
+                });
+
+                alertDialog.show();
+
+//                Intent intent = new Intent(context, Compaign_Activity.class);
+//                Compaign_Activity.storename = holder.txt_shop_name.getText().toString();
+//                intent.putExtra("shop_id",model.getShop_id());
+//                context.startActivity(intent);
             }
         });
+
     }
 
     @Override

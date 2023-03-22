@@ -5,30 +5,33 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.zasa.superduper.Adapters.Categories_Adapter;
+import com.zasa.superduper.Adapters.Survey_Adapter;
 import com.zasa.superduper.ApiManager.SurveysAppManager;
 import com.zasa.superduper.Login.LoginActivity;
-import com.zasa.superduper.Models.Category_Model;
+import com.zasa.superduper.Models.Surveys_Model;
 import com.zasa.superduper.MyCallBack;
 import com.zasa.superduper.R;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.zasa.superduper.helpers.LocalDB;
 
 import java.util.ArrayList;
 
 public class Survey_Activity extends AppCompatActivity implements MyCallBack {
     RecyclerView rcv_categories;
     String api_Token;
-    ArrayList<Category_Model> catList = new ArrayList<>();
+    ArrayList<Surveys_Model> surveyList = new ArrayList<>();
+    LocalDB localDB ;
+    SQLiteDatabase sqLiteDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_after_checkout);
+
+        localDB = new LocalDB(Survey_Activity.this);
 
         SharedPreferences sharedPreferenc = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
         SharedPreferences.Editor editor = sharedPreferenc.edit();
@@ -41,7 +44,7 @@ public class Survey_Activity extends AppCompatActivity implements MyCallBack {
 
     private void getCatList() {
         SurveysAppManager surveysAppManager = new SurveysAppManager(this,this);
-        surveysAppManager.postSurveys(getIntent().getExtras().getString("compaign_id"));
+        surveysAppManager.getShopSurveys(getIntent().getExtras().getInt("compaign_id"));
 
     }
 
@@ -49,9 +52,11 @@ public class Survey_Activity extends AppCompatActivity implements MyCallBack {
     public void notify(Object obj, String type) {
 
         if (type.equalsIgnoreCase("surveys")){
-            catList = (ArrayList<Category_Model>)obj;
+            surveyList = (ArrayList<Surveys_Model>)obj;
 
-            Categories_Adapter adapter = new Categories_Adapter(catList, this,this);
+            surveyList = localDB.getSurveys();
+
+            Survey_Adapter adapter = new Survey_Adapter(surveyList, this,this,sqLiteDatabase);
             rcv_categories.setAdapter(adapter);
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -62,4 +67,6 @@ public class Survey_Activity extends AppCompatActivity implements MyCallBack {
             Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
         }
     }
+
+
 }

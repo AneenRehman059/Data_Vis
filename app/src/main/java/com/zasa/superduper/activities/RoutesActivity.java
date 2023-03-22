@@ -1,11 +1,16 @@
 package com.zasa.superduper.activities;
 
+import static com.zasa.superduper.helpers.LocalDB.ROUTES_TABLE;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +23,7 @@ import com.zasa.superduper.Login.LoginActivity;
 import com.zasa.superduper.Models.Routes_Model;
 import com.zasa.superduper.MyCallBack;
 import com.zasa.superduper.R;
+import com.zasa.superduper.helpers.LocalDB;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +43,8 @@ public class RoutesActivity extends AppCompatActivity implements MyCallBack {
     ImageView btn_back;
     private int layout = 1;
     String api_Token;
-
+    LocalDB localDB ;
+    SQLiteDatabase sqLiteDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,8 +60,12 @@ public class RoutesActivity extends AppCompatActivity implements MyCallBack {
         editor.putString(KEY_DATE, current_date);
         editor.apply();
 
+        localDB = new LocalDB(RoutesActivity.this);
+
         operation_rv = findViewById(R.id.rv_opeartion);
         btn_back = findViewById(R.id.backBtn);
+
+
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,8 +79,8 @@ public class RoutesActivity extends AppCompatActivity implements MyCallBack {
         String sharedpref_date = sharedPreferences.getString(PREF_DATE, null);
 
         if (current_date.equals(sharedpref_date)){
-
             getOperationList();
+
         }
         else {
             Intent intent = new Intent(RoutesActivity.this, StartDay_Activity.class);
@@ -77,6 +88,7 @@ public class RoutesActivity extends AppCompatActivity implements MyCallBack {
             finish();
         }
     }
+
 
     private void getToken() {
         SharedPreferences sharedPreferenc = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
@@ -86,16 +98,22 @@ public class RoutesActivity extends AppCompatActivity implements MyCallBack {
 
     private void getOperationList() {
 
-        RoutesAppManager routesAppManager = new RoutesAppManager(this,this);
-        JSONObject routes_params = new JSONObject();
+//        RoutesAppManager routesAppManager = new RoutesAppManager(this,this);
+//        JSONObject routes_params = new JSONObject();
+//        try {
+//            routes_params.put("token",api_Token);
+//            routesAppManager.postRoutes();
+//        }
+//        catch (JSONException e) {
+//            throw new RuntimeException(e);
+//        }
 
-        try {
-            routes_params.put("token",api_Token);
-            routesAppManager.postRoutes(routes_params);
-        }
-        catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+        operationList = localDB.getRoutes();
+        Routes_Adapter operation_adapter = new Routes_Adapter(operationList,this,sqLiteDatabase);
+        operation_rv.setAdapter(operation_adapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        operation_rv.setLayoutManager(layoutManager);
+
     }
 
     private String getCurrentDate() {
@@ -113,13 +131,6 @@ public class RoutesActivity extends AppCompatActivity implements MyCallBack {
     @Override
     public void notify(Object obj, String type) {
         if (type.equalsIgnoreCase("routes")){
-            operationList = (ArrayList<Routes_Model>)obj;
-
-            Routes_Adapter operation_adapter = new Routes_Adapter(operationList,this);
-            operation_rv.setAdapter(operation_adapter);
-
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-            operation_rv.setLayoutManager(layoutManager);
         }
         else
         {

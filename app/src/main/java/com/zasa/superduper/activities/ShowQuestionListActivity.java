@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import com.zasa.superduper.Adapters.Question_Adapter;
@@ -16,6 +17,7 @@ public class ShowQuestionListActivity extends AppCompatActivity {
 
     RecyclerView rv_showList;
     ArrayList<Question_Model> questionList;
+    SQLiteDatabase sqLiteDatabase;
     public static Question_Adapter question_adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +28,7 @@ public class ShowQuestionListActivity extends AppCompatActivity {
 
         questionList = (ArrayList<Question_Model>) getIntent().getSerializableExtra("myList");
 
-        Question_Adapter ques_adapter = new Question_Adapter(questionList, this,null,"yes");
+        Question_Adapter ques_adapter = new Question_Adapter(questionList, this,null,"yes",sqLiteDatabase);
 
         rv_showList.setAdapter(ques_adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);

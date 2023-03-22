@@ -54,7 +54,7 @@
         android:text="Bismillah General Store"
         android:textStyle="bold"
         android:id="@+id/tvStoreName"
-        android:textSize="@dimen/_16sdp" />
+        android:textSize="@dimen/_13ssp" />
 
 <!--    <Button-->
 <!--        android:layout_width="wrap_content"-->
@@ -91,8 +91,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:textSize="20sp"
+        android:layout_marginTop="@dimen/_9sdp"
+        android:textSize="@dimen/_20ssp"
         android:text="00 : 00 : 00"
         android:textStyle="bold"
         android:id="@+id/tvTimer" />
@@ -115,21 +115,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:textSize="12sp"
+            android:textSize="@dimen/_10ssp"
             android:text="Modules Attempted" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="12sp"
+            android:textSize="@dimen/_10ssp"
             android:text="0/8" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:textSize="12sp"
+            android:textSize="@dimen/_10ssp"
             android:text="Time Spent" />
 
         <TextView
@@ -137,7 +137,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="0/8"
-            android:textSize="12sp"/>
+            android:textSize="@dimen/_10ssp"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -165,7 +165,7 @@
         android:paddingRight="@dimen/_20sdp"
         android:text="CheckIn"
         android:textAllCaps="false"
-        android:onClick="startStopTapped"/>
+        />
 
         <Button
             android:layout_width="wrap_content"
@@ -175,8 +175,8 @@
             android:layout_gravity="center"
             android:textColor="@color/white"
             android:background="@drawable/check_out_btn_bg"
-            android:paddingLeft="@dimen/_10sdp"
-            android:paddingRight="@dimen/_10sdp"
+            android:paddingLeft="@dimen/_5sdp"
+            android:paddingRight="@dimen/_5sdp"
             android:text="CheckOut"
             android:textAllCaps="false"
             android:visibility="gone"

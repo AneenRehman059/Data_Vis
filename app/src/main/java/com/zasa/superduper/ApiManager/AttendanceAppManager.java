@@ -11,17 +11,15 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.zasa.superduper.Models.LoginModel;
 import com.zasa.superduper.MyCallBack;
-import com.zasa.superduper.helpers.PreferencesData;
 import com.zasa.superduper.retrofit.ApiEndpoints;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LoginAppManager {
-    private static final String TAG = "SyncManager";
+public class AttendanceAppManager {
 
+    private static final String TAG = "SyncManager";
 
     private Activity parentActivity;
 
@@ -35,7 +33,7 @@ public class LoginAppManager {
     RequestQueue requestQueue;
     ProgressDialog progressDialog;
 
-    public LoginAppManager(Activity parentActivity, MyCallBack callBack) {
+    public AttendanceAppManager(Activity parentActivity, MyCallBack callBack) {
         this.parentActivity = parentActivity;
         this.callBack = callBack;
     }
@@ -45,20 +43,20 @@ public class LoginAppManager {
         jRequestParam = requestParams;
         requestQueue = Volley.newRequestQueue(this.parentActivity);
 
-        JSONObject jobj = new JSONObject();
+        JSONObject jobj= new JSONObject();
         progressDialog = new ProgressDialog(this.parentActivity);
         progressDialog.setTitle("Loading");
         progressDialog.show();
 
         try {
-            jobj.put("request", jRequestParam);
+            jobj.put("request",jRequestParam);
 
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.POST, ApiEndpoints.SignInURL, jRequestParam,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.POST, ApiEndpoints.SignInURL,jRequestParam,
 
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -66,31 +64,20 @@ public class LoginAppManager {
 
                         try {
 
-                            if (response.has("token")) {
+                            if(response.get("result").toString().equalsIgnoreCase("ok")){
 
-                                JSONObject jsonObject = response.getJSONObject("user");
-//                                LoginModel loginModel = new LoginModel(jsonObject.getString("name"));
-//                                loginModel.setName(jsonObject.getString("name"));
-//                                loginModel.setEmail(jsonObject.getString("email"));
-//                                loginModel.setId(jsonObject.getString("id"));
 
-                                String user_id = ""+jsonObject.getInt("id");
-                                PreferencesData.saveString(parentActivity, "user_id", user_id);
+                                callBack.notify(response.getJSONObject("user_info"),"login");
+                            }else{
 
-                                // jsonObject will save the response of userclass
-
-                                PreferencesData.saveJsonObject(parentActivity, "userObject", jsonObject);
-                                callBack.notify(response.getString("token"), "login_token");
-                            } else {
-
-                                if (!parentActivity.isFinishing())
+                                if(!parentActivity.isFinishing())
                                     Toast.makeText(parentActivity, response.get("message").toString(), Toast.LENGTH_SHORT).show();
                             }
                         } catch (Exception ex) {
-                            if (!parentActivity.isFinishing())
+                            if(!parentActivity.isFinishing())
                                 Toast.makeText(parentActivity, ex.getMessage(), Toast.LENGTH_SHORT).show();
                         }
-                        if (!parentActivity.isFinishing())
+                        if(!parentActivity.isFinishing())
                             progressDialog.dismiss();
 
                     }
@@ -99,15 +86,14 @@ public class LoginAppManager {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        if (!parentActivity.isFinishing())
+                        if(!parentActivity.isFinishing())
                             progressDialog.dismiss();
-                        String em = "";
-                        if (error.getMessage() != null)
-                            em = error.getMessage();
+                        String em="";
+                        if(error.getMessage()!=null)
+                            em=error.getMessage();
 
-                        if (!parentActivity.isFinishing())
-                            Toast.makeText(parentActivity, "Server Connectivity Error", Toast.LENGTH_SHORT).show();
-//                            ApiEndpoints.showAlert(parentActivity,"Alert","Server Connectivity error. Slow or no Internet Connection.\n"+em);
+                        if(!parentActivity.isFinishing())
+                            Toast.makeText(parentActivity, "Server Connectivity error. Slow or no Internet Connection.", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -118,6 +104,5 @@ public class LoginAppManager {
         requestQueue.add(jsonObjectRequest);
 
     }
-
 
 }

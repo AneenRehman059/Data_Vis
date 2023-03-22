@@ -24,7 +24,7 @@
                 android:fontFamily="@font/gilory_semibold"
                 android:text="Rose Petal"
                 android:textColor="@color/black"
-               />
+                />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -40,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:hint="Enter character"
+                android:hint="Enter number"
                 android:padding="@dimen/_5sdp"
                 android:background="@drawable/edt_backround"
                 android:layout_marginTop="@dimen/_15sdp"

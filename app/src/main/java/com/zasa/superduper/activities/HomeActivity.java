@@ -1,5 +1,7 @@
 package com.zasa.superduper.activities;
 
+import static com.zasa.superduper.helpers.LocalDB.ROUTES_TABLE;
+
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -9,8 +11,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,32 +25,56 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
+import com.zasa.superduper.ApiManager.CompaignAppManager;
+import com.zasa.superduper.ApiManager.QuestionsAppManager;
+import com.zasa.superduper.ApiManager.RoutesAppManager;
+import com.zasa.superduper.ApiManager.ShopAppManager;
+import com.zasa.superduper.ApiManager.SurveysAppManager;
 import com.zasa.superduper.CustomToastError;
 import com.zasa.superduper.Home.HomeFragment;
+import com.zasa.superduper.Models.Compaign_Model;
 import com.zasa.superduper.Models.LoginModel;
+import com.zasa.superduper.Models.Question_Model;
+import com.zasa.superduper.Models.Routes_Model;
+import com.zasa.superduper.Models.ShopList_Model;
+import com.zasa.superduper.Models.Surveys_Model;
+import com.zasa.superduper.MyCallBack;
 import com.zasa.superduper.Profile.ProfileActivity;
 import com.zasa.superduper.R;
+import com.zasa.superduper.helpers.LocalDB;
 import com.zasa.superduper.helpers.PreferencesData;
+import com.zasa.superduper.retrofit.ApiEndpoints;
 
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MyCallBack {
 
     BottomNavigationView bottomNavigationView;
     FloatingActionButton floatingActionButton;
     ArrayList<Fragment> fragments = new ArrayList<>();
     NavigationView navigationView;
-    TextView headerUsername, abUserName, tv_headerName,tv_headerEmail;
+    TextView headerUsername, abUserName, tv_headerName, tv_headerEmail;
     DrawerLayout drawer;
     View header;
     View view;
@@ -57,6 +85,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     ProgressBar progressBar;
     TextView text_id;
     TextView hdrTvEmail;
+    ArrayList<Routes_Model> operationList = new ArrayList<>();
+    LocalDB localDB;
+    RequestQueue requestQueue;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -88,6 +119,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         tv_headerName.setText(user.getName());
         headerUsername.setText(user.getName());
         hdrTvEmail.setText(user.getEmail());
+
+        requestQueue = Volley.newRequestQueue(HomeActivity.this);
+        localDB = new LocalDB(HomeActivity.this);
 
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -133,6 +167,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         transaction.commit();
 
 //        context = HomeActivity.this;
+
+        RoutesAppManager routesAppManager = new RoutesAppManager(this, this);
+        routesAppManager.postRoutes();
 
     }
 
@@ -198,6 +235,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 //            Intent intent = new Intent(HomeActivity.this, ContactUsActivity.class);
 //            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 //            startActivity(intent);
+        } else if (id == R.id.attendance) {
+            Intent intent = new Intent(HomeActivity.this, DailyAttendenceActivity.class);
+            startActivity(intent);
         }
 
 
@@ -219,6 +259,47 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @Override
+    public void notify(Object obj, String type) {
+
+        if (type.equalsIgnoreCase("routes")) {
+            operationList = (ArrayList<Routes_Model>) obj;
+            for (Routes_Model route : operationList) {
+
+                ShopAppManager shopAppManager = new ShopAppManager(HomeActivity.this, HomeActivity.this);
+                JSONObject shop_params = new JSONObject();
+
+                try {
+                    shop_params.put("route_id", route.getRoute_id());
+                    shopAppManager.getShops(shop_params);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        else if (type.equalsIgnoreCase("shops")) {
+            ArrayList<ShopList_Model> routesShopList = (ArrayList<ShopList_Model>) obj;
+            for (ShopList_Model shop : routesShopList) {
+                CompaignAppManager compaignAppManager = new CompaignAppManager(HomeActivity.this, HomeActivity.this);
+                compaignAppManager.getShopCompaigns("" + shop.getShop_id());
+            }
+        }
+        else if (type.equalsIgnoreCase("compaigns")) {
+            ArrayList<Compaign_Model> campaignList = (ArrayList<Compaign_Model>) obj;
+            for (Compaign_Model compaigns : campaignList) {
+                SurveysAppManager surveysAppManager = new SurveysAppManager(HomeActivity.this, HomeActivity.this);
+                surveysAppManager.getShopSurveys(Integer.parseInt("" + compaigns.getCompaign_id()));
+            }
+        }
+//        else if (type.equalsIgnoreCase("surveys")) {
+//            ArrayList<Surveys_Model> surveysList = (ArrayList<Surveys_Model>) obj;
+//            for (Surveys_Model surveys : surveysList) {
+//                QuestionsAppManager questionsAppManager = new QuestionsAppManager(HomeActivity.this, HomeActivity.this);
+//                questionsAppManager.getSurveyQuestions(Integer.parseInt("" + surveys.getSurvey_id()));
+//            }
+//        }
+    }
+
     public void startProgress() {
         for (value = 0; value < 100; value = value + 1) {
             try {
@@ -235,5 +316,4 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }, 5000);
         }
     }
-
 }

@@ -4,19 +4,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
-import com.zasa.superduper.Adapters.Categories_Adapter;
-import com.zasa.superduper.Models.Category_Model;
+import com.zasa.superduper.Adapters.Survey_Adapter;
+import com.zasa.superduper.Models.Surveys_Model;
 import com.zasa.superduper.MyCallBack;
 import com.zasa.superduper.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class After_Checkout extends AppCompatActivity implements MyCallBack {
     RecyclerView rcv_categories;
-    ArrayList<Category_Model> catList = new ArrayList<>();
+    ArrayList<Surveys_Model> catList = new ArrayList<>();
+    SQLiteDatabase sqLiteDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,15 +30,15 @@ public class After_Checkout extends AppCompatActivity implements MyCallBack {
 
     private void getCatList() {
 
-        catList.add(new Category_Model("Rose Patel"));
-        catList.add(new Category_Model("Tulip"));
-        catList.add(new Category_Model("Maxob"));
-        catList.add(new Category_Model("Competitors"));
-        catList.add(new Category_Model("Competitors"));
-        catList.add(new Category_Model("Competitors"));
-        catList.add(new Category_Model("Rose Patel"));
+//        catList.add(new Surveys_Model("Rose Patel"));
+//        catList.add(new Surveys_Model("Tulip"));
+//        catList.add(new Surveys_Model("Maxob"));
+//        catList.add(new Surveys_Model("Competitors"));
+//        catList.add(new Surveys_Model("Competitors"));
+//        catList.add(new Surveys_Model("Competitors"));
+//        catList.add(new Surveys_Model("Rose Patel"));
 
-        Categories_Adapter adapter = new Categories_Adapter(catList, this,this);
+        Survey_Adapter adapter = new Survey_Adapter(catList, this,this,sqLiteDatabase);
         rcv_categories.setAdapter(adapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);

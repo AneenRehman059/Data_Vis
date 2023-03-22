@@ -2,6 +2,7 @@ package com.zasa.superduper.Fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,7 +21,9 @@ import com.zasa.superduper.Login.LoginActivity;
 import com.zasa.superduper.Models.ShopList_Model;
 import com.zasa.superduper.MyCallBack;
 import com.zasa.superduper.R;
+import com.zasa.superduper.activities.RoutesActivity;
 import com.zasa.superduper.activities.TrackOperationPlaceActivity;
+import com.zasa.superduper.helpers.LocalDB;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,6 +34,8 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements MyCa
     RecyclerView recyclerView_shopList;
     ArrayList<ShopList_Model> shopList = new ArrayList<>();
     String api_Token;
+    LocalDB localDB ;
+    SQLiteDatabase sqLiteDatabase;
 
     public BottomSheetDialog() {
         // Required empty public constructor
@@ -49,6 +54,8 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements MyCa
         SharedPreferences.Editor editor1 = sharedPreferenc.edit();
         api_Token = String.valueOf(editor1.putString("token_id", ""));
 
+        localDB = new LocalDB(getContext());
+
         getShopList();
         return view;
     }
@@ -57,22 +64,13 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements MyCa
         ShopAppManager shopAppManager = new ShopAppManager(getActivity(), this);
         JSONObject shop_params = new JSONObject();
 
-//        ShopList_Adapter shopList_adapter = new ShopList_Adapter(shopList,getContext());
-//        recyclerView_shopList.setAdapter(shopList_adapter);
-
         try {
 //            TrackOperationPlaceActivity act = (TrackOperationPlaceActivity) getActivity();
             shop_params.put("route_id", TrackOperationPlaceActivity.routeId);
-            shopAppManager.postRoutes(shop_params);
+            shopAppManager.getShops(shop_params);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-//        recyclerView_shopList.setLayoutManager(layoutManager);
-
-//        shopList_adapter.notifyDataSetChanged();
-
     }
 
     @Override
@@ -80,7 +78,9 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements MyCa
         if (type.equalsIgnoreCase("shops")) {
             shopList = (ArrayList<ShopList_Model>) obj;
 
-            ShopList_Adapter shopList_adapter = new ShopList_Adapter(shopList, getContext());
+            shopList = localDB.getShops();
+
+            ShopList_Adapter shopList_adapter = new ShopList_Adapter(shopList, getContext(),sqLiteDatabase);
             recyclerView_shopList.setAdapter(shopList_adapter);
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());

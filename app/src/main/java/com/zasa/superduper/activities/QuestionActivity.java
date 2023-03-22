@@ -11,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -30,6 +31,7 @@ import com.zasa.superduper.Models.Question_Model;
 import com.zasa.superduper.MyCallBack;
 import com.zasa.superduper.MyFunctions;
 import com.zasa.superduper.R;
+import com.zasa.superduper.helpers.LocalDB;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,6 +49,8 @@ public class QuestionActivity extends AppCompatActivity implements MyCallBack {
     private final int REQUEST_GALLERY = 5464;
     private static MyFunctions myFunctions;
     String apiTokens;
+    LocalDB localDB ;
+    SQLiteDatabase sqLiteDatabase;
 
     private static String imagePath = "";
     private ArrayList<String> arrayList = new ArrayList<>();
@@ -67,6 +71,8 @@ public class QuestionActivity extends AppCompatActivity implements MyCallBack {
         TextView groupTitle = findViewById(R.id.tvGroupTitle);
         groupTitle.setText("Group: "+getIntent().getExtras().getString("category_name"));
 
+        localDB = new LocalDB(QuestionActivity.this);
+
         getQuestionList();
     }
 
@@ -76,7 +82,7 @@ public class QuestionActivity extends AppCompatActivity implements MyCallBack {
         JSONObject question_params = new JSONObject();
         try {
             question_params.put("token",apiTokens);
-            questionsAppManager.postQuestions(question_params);
+            questionsAppManager.getSurveyQuestions(question_params);
         }
         catch (JSONException e) {
             throw new RuntimeException(e);
@@ -104,7 +110,7 @@ public class QuestionActivity extends AppCompatActivity implements MyCallBack {
         myFunctions= new MyFunctions(this);
         final CharSequence[] items;
         try {
-            items = new CharSequence[]{"Take Photo", "Choose Image", "Cancel"};
+            items = new CharSequence[]{"Take Photo", "Cancel"};
             AlertDialog.Builder builder = new AlertDialog.Builder(QuestionActivity.this);
             builder.setCancelable(false);
             builder.setTitle("Select Image");
@@ -123,21 +129,7 @@ public class QuestionActivity extends AppCompatActivity implements MyCallBack {
                                         .show();
                             })
                             .ask();
-                } else if (items[i].equals("Choose Image")) {
-                    RuntimePermission.askPermission(this)
-                            .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            .onAccepted(result -> {
-                                onClickGallery();
-                            })
-                            .onDenied(result -> {
-                                new android.app.AlertDialog.Builder(this)
-                                        .setMessage("Please accept our permissions")
-                                        .setPositiveButton("yes", (dialog1, which) -> result.askAgain()) // ask again
-                                        .setNegativeButton("no", (dialog1, which) -> dialog1.dismiss())
-                                        .show();
-                            })
-                            .ask();
-                } else {
+                }  else {
                     dialogInterface.dismiss();
                 }
             });
@@ -186,7 +178,9 @@ public class QuestionActivity extends AppCompatActivity implements MyCallBack {
 
             questionList = (ArrayList<Question_Model>)obj;
 
-            Question_Adapter question_adapter = new Question_Adapter(questionList, this,this,"no");
+            questionList = localDB.getQuestions();
+
+            Question_Adapter question_adapter = new Question_Adapter(questionList, this,this,"no",sqLiteDatabase);
 
             questionsRv.setAdapter(question_adapter);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);

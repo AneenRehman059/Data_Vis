@@ -47,18 +47,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class TrackOperationPlaceActivity extends AppCompatActivity implements OnMapReadyCallback{
+public class TrackOperationPlaceActivity extends AppCompatActivity implements OnMapReadyCallback {
     SupportMapFragment smf;
     String address;
     FusedLocationProviderClient client;
     Button btn_operation_on;
-    public static String route,routeId;
-    TextView txt_routes;
+    public static String route;
+    public static int routeId;
+
+    TextView txt_routes,txt_addShops;
     private GoogleMap mMap;
     LatLng gourmet_ghalib_market = new LatLng(31.5324454, 74.2987515);
-    LatLng gourmet_mini_market  = new LatLng(31.5325822,74.2987514);
+    LatLng gourmet_mini_market = new LatLng(31.5325822, 74.2987514);
     ArrayList<LatLng> arrayList = new ArrayList<>();
-    ArrayList<String>title =new ArrayList<String>();
+    ArrayList<String> title = new ArrayList<String>();
     LocationListener locationListener;
     LocationManager locationManager;
     private static final int REQUEST_LOCATION_UPDATES = 1;
@@ -69,6 +71,14 @@ public class TrackOperationPlaceActivity extends AppCompatActivity implements On
         setContentView(R.layout.activity_track_operation_place);
 
         btn_operation_on = (Button) findViewById(R.id.btn_operationOn);
+        txt_addShops = findViewById(R.id.tv_shops);
+        txt_addShops.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(TrackOperationPlaceActivity.this,AddShopsActivity.class);
+                startActivity(intent);
+            }
+        });
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         txt_routes = findViewById(R.id.tv_routes);
@@ -92,8 +102,8 @@ public class TrackOperationPlaceActivity extends AppCompatActivity implements On
         arrayList.add(gourmet_ghalib_market);
         arrayList.add(gourmet_mini_market);
 
-        title.add("Gourmet mini market");
-        title.add("Gourmet ghalib market");
+        title.add("Gourmet Mini Market");
+        title.add("Gourmet Ghalib Market");
 
         Dexter.withContext(getApplicationContext())
                 .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -168,9 +178,9 @@ public class TrackOperationPlaceActivity extends AppCompatActivity implements On
 //        mMap.addMarker(new MarkerOptions().position(new LatLng(31.5325822,74.2987514)).title("Gourmet Mini Market"));
 //        mMap.getUiSettings().setMyLocationButtonEnabled(true);
 //        mMap.setInfoWindowAdapter(new MyInfoWindowAdapter(TrackOperationPlaceActivity.this));
-        for (int i = 0;i<arrayList.size(); i++){
+        for (int i = 0; i < arrayList.size(); i++) {
 
-            for (int j =0;j<title.size();j++){
+            for (int j = 0; j < title.size(); j++) {
                 mMap.addMarker(new MarkerOptions().position(arrayList.get(i)).title(String.valueOf(title.get(j))));
             }
             mMap.moveCamera(CameraUpdateFactory.newLatLng(arrayList.get(i)));

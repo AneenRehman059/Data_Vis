@@ -1,7 +1,11 @@
 package com.zasa.superduper.ApiManager;
 
+import static com.zasa.superduper.helpers.LocalDB.SURVEYS_TABLE;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -13,13 +17,13 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.zasa.superduper.Models.Category_Model;
+import com.zasa.superduper.Models.Surveys_Model;
 import com.zasa.superduper.MyCallBack;
+import com.zasa.superduper.helpers.LocalDB;
 import com.zasa.superduper.helpers.PreferencesData;
 import com.zasa.superduper.retrofit.ApiEndpoints;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -42,13 +46,14 @@ public class SurveysAppManager {
     public String selectedGridDate;
     RequestQueue requestQueue;
     ProgressDialog progressDialog;
+    LocalDB localDB;
 
     public SurveysAppManager(Activity parentActivity, MyCallBack callBack) {
         this.parentActivity = parentActivity;
         this.callBack = callBack;
     }
 
-    public void postSurveys(String compaign_id) {
+    public void getShopSurveys(int compaign_id) {
 
         requestQueue = Volley.newRequestQueue(this.parentActivity);
 
@@ -57,6 +62,7 @@ public class SurveysAppManager {
         progressDialog.setTitle("Loading");
         progressDialog.show();
 
+        localDB = new LocalDB(parentActivity);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, ApiEndpoints.SurveysURL+"/"+compaign_id,null,
 
@@ -69,9 +75,23 @@ public class SurveysAppManager {
                             if(response.has("surveys")){
                                 // Set Api's Data Here
                                 JSONArray jSurveys = response.getJSONArray("surveys");
-                                ArrayList<Category_Model> catList = new ArrayList<>();
+                                ArrayList<Surveys_Model> catList = new ArrayList<>();
                                 for (int i = 0; i < jSurveys.length(); i++) {
-                                    catList.add(new Category_Model(jSurveys.getJSONObject(i).getString("survey_name")));
+                                    catList.add(new Surveys_Model(jSurveys.getJSONObject(i).getInt("survey_id"),"",jSurveys.getJSONObject(i).getString("survey_name"),"","",jSurveys.getJSONObject(i).getInt("compaign_id"),"",""));
+
+                                    ContentValues contentValues = new ContentValues();
+                                    SQLiteDatabase db = localDB.getWritableDatabase();
+                                    contentValues.put("survey_id", catList.get(i).getSurvey_id());
+                                    contentValues.put("survey_code", catList.get(i).getSurvey_code());
+                                    contentValues.put("survey_name", catList.get(i).getSurvey_name());
+                                    contentValues.put("survey_description", catList.get(i).getSurvey_description());
+                                    contentValues.put("survey_status", catList.get(i).getSurvey_status());
+                                    contentValues.put("compaign_id", catList.get(i).getCompaign_id());
+                                    contentValues.put("created_at", catList.get(i).getCreated_at());
+                                    contentValues.put("updated_at", catList.get(i).getUpdated_at());
+
+                                    db.insert(SURVEYS_TABLE, null, contentValues);
+
                                 }
 
                                 callBack.notify(catList,"surveys");
@@ -99,16 +119,16 @@ public class SurveysAppManager {
                         String em="";
                         if(error.getMessage()!=null)
                             em=error.getMessage();
-                        ArrayList<Category_Model> catList = new ArrayList<>();
-                        catList.add(new Category_Model("Rose Patel"));
-                        catList.add(new Category_Model("Tulip"));
-                        catList.add(new Category_Model("Maxob"));
-                        catList.add(new Category_Model("Competitors"));
-                        catList.add(new Category_Model("Competitors"));
-                        catList.add(new Category_Model("Competitors"));
-                        catList.add(new Category_Model("Rose Patel"));
-                        callBack.notify(catList,"surveys");
+                        ArrayList<Surveys_Model> catList = new ArrayList<>();
+                        catList.add(new Surveys_Model(1,"","Rose Patel","","",1,"",""));
+                        catList.add(new Surveys_Model(1,"","Tulip","","",1,"",""));
+                        catList.add(new Surveys_Model(1,"","Maxob","","",1,"",""));
+                        catList.add(new Surveys_Model(1,"","Competitors","","",1,"",""));
+                        catList.add(new Surveys_Model(1,"","Competitors","","",1,"",""));
+                        catList.add(new Surveys_Model(1,"","Competitors","","",1,"",""));
+                        catList.add(new Surveys_Model(1,"","Rose Patel","","",1,"",""));
 
+                        callBack.notify(catList,"surveys");
 
 //                        if(!parentActivity.isFinishing())
 //                            Variables.showAlert(parentActivity,"Alert","Server Connectivity error. Slow or no Internet Connection.\n"+em);

@@ -11,17 +11,34 @@
         android:layout_height="@dimen/_40sdp"
         app:cardElevation="@dimen/_3sdp"
         android:background="@color/secondary1"
-        app:cardBackgroundColor="@color/secondary1"
-        >
-        <TextView
-            android:layout_width="wrap_content"
+        app:cardBackgroundColor="@color/secondary1">
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_routes"
-            android:text="Route Name"
-            android:textColor="@color/white"
-            android:fontFamily="@font/gilory_semibold"
             android:layout_gravity="center"
-            android:gravity="center"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_shops"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:text="Add Shops"
+                android:textColor="@color/white"
+                android:fontFamily="@font/gilory_semibold"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_routes"
+                android:text="Route Name"
+                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/white"
+                android:fontFamily="@font/gilory_semibold"
+             />
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
 
